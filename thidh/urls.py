@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from questions.views import PaperDetailView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('paper/<int:pk>', PaperDetailView.as_view())
 ]

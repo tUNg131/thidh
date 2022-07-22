@@ -13,13 +13,16 @@ class Paper(models.Model):
     )
     date = models.DateField(verbose_name="Paper Date")
 
+    def __str__(self):
+        return self.get_subject_display() + " " + str(self.date.year)
+
 
 class Question(models.Model):
     MCQ_CHOICES = [
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
+        (1, 'A'),
+        (2, 'B'),
+        (3, 'C'),
+        (4, 'D'),
     ]
 
     question_json = models.JSONField(verbose_name="Question JSON")
@@ -28,3 +31,4 @@ class Question(models.Model):
         choices=MCQ_CHOICES
     )
     paper = models.ForeignKey('Paper', on_delete=models.CASCADE)
+
