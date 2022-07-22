@@ -1,33 +1,36 @@
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic import FormView
 from django.forms.formsets import formset_factory
 
-from .models import Paper
+from .models import Paper, question_to_dict
 from .forms import QuestionForm, BaseQuestionFormSet
 
 
-class PaperDetailView(DetailView):
+class PaperDetailView(SingleObjectMixin, FormView):
     model = Paper
     template_name = 'paper_details.html'
 
-    def get_context_data(self, **kwargs):
-        context = {}
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_form_class(self):
         if self.object:
-            questions_data = []
-            questions = self.object.question_set
+            return formset_factory(
+                QuestionForm,
+                formset=BaseQuestionFormSet,
+                extra=self.object.question_set.count()
+            )
 
-            for q in questions.all():
-                question_text = q.question_json['question_text']
-                answers = q.question_json['answers']
-                choices = [
-                    (1, answers[0]),  # many hard coding here
-                    (2, answers[1]),
-                    (3, answers[2]),
-                    (4, answers[3]),
-                ]
-                questions_data.append((question_text, choices))
-
-            question_form_set_class_name = formset_factory(
-                QuestionForm, formset=BaseQuestionFormSet, extra=questions.count())
-            context['formset'] = question_form_set_class_name(questions_data)
-        context.update(kwargs)
-        return super().get_context_data(**context)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.object:
+            form_kwargs_list = [question_to_dict(q) for q in self.object.question_set.all()]
+            kwargs.update({
+                'form_kwargs_list': form_kwargs_list
+            })
+        return kwargs

@@ -1,6 +1,10 @@
 from django.db import models
 
 
+def get_choices(options):
+    return [(str(i), option) for (i, option) in enumerate(options)]
+
+
 class Paper(models.Model):
     SUBJECTS = [
         ('En', 'Tieng Anh'),
@@ -18,17 +22,20 @@ class Paper(models.Model):
 
 
 class Question(models.Model):
-    MCQ_CHOICES = [
-        (1, 'A'),
-        (2, 'B'),
-        (3, 'C'),
-        (4, 'D'),
-    ]
-
-    question_json = models.JSONField(verbose_name="Question JSON")
+    json_data = models.JSONField(verbose_name="Question JSON")
     correct_answer = models.CharField(
         max_length=1,
-        choices=MCQ_CHOICES
+        choices=get_choices(['A', 'B', 'C', 'D'])
     )
     paper = models.ForeignKey('Paper', on_delete=models.CASCADE)
 
+
+def question_to_dict(question):
+    """
+    Return a dict containing the data in question instance suitable for passing as
+    QuestionForm's keyword arguments.
+    """
+    return {
+        'question_text': question.json_data['qst'],
+        'choices': get_choices(question.json_data['ans'])
+    }
