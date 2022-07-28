@@ -1,5 +1,6 @@
 from django import forms
-from .models import get_choices
+from django.core.exceptions import ValidationError
+from .models import Question, get_choices
 from django.utils.translation import gettext as _
 
 
@@ -12,18 +13,90 @@ def get_index_iter():
     return index_iter()
 
 
-class QuestionForm(forms.Form):
-    # Need to make these dynamic & modelform
-    question_text = forms.CharField(widget=forms.Textarea)
-    answer_A = forms.CharField()
-    answer_B = forms.CharField()
-    answer_C = forms.CharField()
-    answer_D = forms.CharField()
-    correct_answer = forms.ChoiceField(choices=get_choices())
+class QuestionJSONWidget(forms.MultiWidget):
+    def __init__(self, choices, attrs=None):
+        widgets = [forms.Textarea(attrs=attrs)]
+        for choice in choices:
+            widgets.append(forms.TextInput(attrs=attrs))
+        super().__init__(widgets)
+        self.choices = choices
+
+    def decompress(self, value):
+        if value:
+            question_text = value["qnt"]
+            choices = value["chs"]
+            return [question_text, *choices]
+        return [None]*(len(self.choices)+1)
+
+
+class HiddenQuestionJSONWidget(QuestionJSONWidget):
+    def __init__(self, choices, attrs=None):
+        super().__init__(choices, attrs)
+        for widget in self.widgets:
+            widget.input_type = 'hidden'
+
+
+class QuestionJSONDataField(forms.MultiValueField):
+    error_messages_template = "Enter a valid answer {}."
+
+    def __init__(self, choices, **kwargs):
+        errors = self.default_error_messages.copy()
+        if "error_messages" in kwargs:
+            errors.update(kwargs["error_messages"])
+        localize = kwargs.get("localize", False)
+        fields = [
+            forms.CharField(
+                error_messages={"invalid": "Enter a valid question text."},
+                localize=localize
+            )
+        ]
+        for choice in choices:
+            if not isinstance(choice, str):
+                choice = str(choice)
+            error_message = QuestionJSONDataField.error_messages_template.format(choice)
+            
+            fields.append(
+                forms.CharField(
+                    error_messages={"invalid": error_message},
+                    localize=localize
+                )
+            )
+
+        self.widget = QuestionJSONWidget(choices)
+        self.hidden_widget = HiddenQuestionJSONWidget(choices)
+
+        super().__init__(fields, **kwargs)
+        self.choices = choices
+        
+
+    def compress(self, data_list):
+        if data_list:
+            choices = self.choices
+            for data, choice in zip(data_list, choices):
+                if data in self.empty_values:
+                    error_message = QuestionJSONDataField.error_messages_template.format(
+                        choice)
+                    raise ValidationError(
+                        error_message, code=f"invalid_{choice}"
+                    )
+            question_text, *choices = data
+            result = {
+                "qnt": question_text,
+                "chs": choices
+            }
+            return result
+        return None
+
+
+class QuestionForm(forms.ModelForm):
+    json_data = QuestionJSONDataField(['A', 'B', 'C', 'D'])
+    class Meta:
+        model = Question
+        fields = '__all__'
 
 
 class PaperForm(forms.Form):
-    template_name = 'paper_form_snippet.html'
+    template_name = "paper_form_snippet.html"
 
     def __init__(self, paper=None, **kwargs):
         if paper is None:
@@ -38,10 +111,10 @@ class PaperForm(forms.Form):
             questions = []
             for q in s.questions.all():
                 field_name = f"question-{q.id}"
-                choices = get_choices(q.json_data['chs'])
+                choices = get_choices(q.json_data["chs"])
                 fields[field_name] = forms.ChoiceField(choices=choices)
 
-                question_text = q.json_data['qnt']
+                question_text = q.json_data["qnt"]
                 questions.append({
                     "text": question_text,
                     "field_name": field_name,
