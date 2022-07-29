@@ -1,16 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Question, get_choices
 from django.utils.translation import gettext as _
 
+from .models import Question
+from .models import get_choices
 
-def get_index_iter():
-    def index_iter():
-        num = 0
-        while True:
-            yield num
-            num += 1
-    return index_iter()
 
 
 class QuestionJSONWidget(forms.MultiWidget):
