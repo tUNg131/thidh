@@ -6,7 +6,6 @@ from .models import Question
 from .models import get_choices
 
 
-
 class QuestionJSONWidget(forms.MultiWidget):
     def __init__(self, choices, attrs=None):
         widgets = [forms.Textarea(attrs=attrs)]
@@ -20,7 +19,7 @@ class QuestionJSONWidget(forms.MultiWidget):
             question_text = value["qnt"]
             choices = value["chs"]
             return [question_text, *choices]
-        return [None]*(len(self.choices)+1)
+        return [None] * (len(self.choices) + 1)
 
 
 class HiddenQuestionJSONWidget(QuestionJSONWidget):
@@ -48,7 +47,7 @@ class QuestionJSONDataField(forms.MultiValueField):
             if not isinstance(choice, str):
                 choice = str(choice)
             error_message = QuestionJSONDataField.error_messages_template.format(choice)
-            
+
             fields.append(
                 forms.CharField(
                     error_messages={"invalid": error_message},
@@ -61,7 +60,6 @@ class QuestionJSONDataField(forms.MultiValueField):
 
         super().__init__(fields, **kwargs)
         self.choices = choices
-        
 
     def compress(self, data_list):
         if data_list:
@@ -73,7 +71,7 @@ class QuestionJSONDataField(forms.MultiValueField):
                     raise ValidationError(
                         error_message, code=f"invalid_{choice}"
                     )
-            question_text, *choices = data
+            question_text, *choices = data_list
             result = {
                 "qnt": question_text,
                 "chs": choices
@@ -84,6 +82,7 @@ class QuestionJSONDataField(forms.MultiValueField):
 
 class QuestionForm(forms.ModelForm):
     json_data = QuestionJSONDataField(['A', 'B', 'C', 'D'])
+
     class Meta:
         model = Question
         fields = '__all__'
@@ -101,12 +100,13 @@ class PaperForm(forms.Form):
         sections = []
         fields = {}
 
-        for s in paper.sections.all():
+        for s in paper.sections.distinct():
             questions = []
             for q in s.questions.all():
                 field_name = f"question-{q.id}"
                 choices = get_choices(q.json_data["chs"])
-                fields[field_name] = forms.ChoiceField(choices=choices)
+                # Need to customise the widget here to some unset value!
+                fields[field_name] = forms.ChoiceField(choices=choices, label="Answer")
 
                 question_text = q.json_data["qnt"]
                 questions.append({
@@ -119,7 +119,7 @@ class PaperForm(forms.Form):
                 "instructions": instructions,
                 "questions": questions
             })
-        
+
         self.sections = sections
 
         super().__init__(**kwargs)

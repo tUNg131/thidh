@@ -30,7 +30,7 @@ class PaperDetailView(SingleObjectMixin, FormView):
 
     def form_valid(self, form):
         correct_count = total_count = 0
-        for q in self.object.get_questions():
+        for q in self.object.questions.all():
             form_answer = form.cleaned_data.get(f'question-{q.id}', None)
             if form_answer == q.correct_answer:
                 correct_count += 1

@@ -1,60 +1,91 @@
 from django.db import models
-from thidhauth.models import User
+from accounts.models import User
 
 
-def get_choices(options=['A', 'B', 'C', 'D']):
+def get_choices(options):
+    options = ["---"] + options
     return [(str(i), option) for (i, option) in enumerate(options)]
+
+
+DEFAULT_CHOICES = get_choices(["A", "B", "C", "D"])
 
 
 class PaperManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().prefetch_related('sections', 'sections__questions')
+        return super().get_queryset().prefetch_related("questions", "questions__section")
 
 
 class Paper(models.Model):
     SUBJECTS = [
-        ('En', 'Tieng Anh'),
+        ("r", "Random"),
+        ("0", "Tieng Anh"),
     ]
 
-    code = models.CharField(verbose_name="Paper Code", max_length=10)
-    subject = models.CharField(
-        max_length=2,
-        choices=SUBJECTS
-    )
-    date = models.DateField(verbose_name="Paper Date")
-    is_past_paper = models.BooleanField()
+    PAST_PAPER = "p"
+    MOCK_PAPER = "m"
+    QUESTION_COLLECTIONS = "c"
+    PAPER_TYPES = [
+        (PAST_PAPER, "Past paper"),
+        (MOCK_PAPER, "Mock paper"),
+        (QUESTION_COLLECTIONS, "Question collections"),
+    ]
+
+    code = models.CharField(max_length=5)
+    subject = models.CharField(max_length=1, choices=SUBJECTS)
+    date = models.DateField(verbose_name="Paper Date", auto_now=True)
+    type = models.CharField(max_length=1, choices=PAPER_TYPES)
 
     objects = PaperManager()
 
     def __str__(self):
-        return self.get_subject_display() + " " + str(self.date.year)
-
-    def get_questions(self):
-        for s in self.sections.all():
-            for q in s.questions.all():
-                yield q
+        subject = self.get_subject_display()
+        type = self.get_type_display()
+        year = self.date.year
+        if self.type == Paper.PAST_PAPER:
+            code = self.code
+            return f"({type}) {subject} {year} ({code})"
+        else:
+            return f"({type}) {subject} {year}"
 
 
 class Section(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Section name", unique=True)
     instruction_text = models.TextField(verbose_name="Section instruction")
-    paper = models.ForeignKey('Paper', related_name="sections", on_delete=models.CASCADE)
+    papers = models.ManyToManyField(Paper, through="Question", related_name="sections")
+
+    def __str__(self):
+        return self.name
 
 
-class Question(models.Model):
+class Question1(models.Model):
     json_data = models.JSONField(verbose_name="Question JSON")
-    correct_answer = models.CharField(
-        max_length=1,
-        choices=get_choices()
-    )
-    section = models.ForeignKey('Section', related_name="questions", on_delete=models.CASCADE)
-    users = models.ManyToManyField(User, through='UserQuestion', related_name="questions")
+    correct_answer = models.CharField(max_length=1, choices=DEFAULT_CHOICES)
+
+    paper = models.ForeignKey(Paper, related_name="questions", on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, related_name="questions", on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, through="UserQuestion", related_name="questions")
 
     def __str__(self):
         return f"Question {self.id}"
+
+
+class Question(models.Model):
+    text = models.TextField(verbose_name="Question")
+
+    paper = models.ForeignKey(Paper, related_name="questions", on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, related_name="questions", on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, through="UserQuestion", related_name="questions")
+
+
+class Choice(models.Model):
+    text = models.CharField(verbose_name="Answer")
+    is_correct = models.BooleanField(verbose_name="Is correct choice?")
+
+    question = models.ForeignKey(Question, related_name="choices", on_delete=models.CASCADE)
 
 
 class UserQuestion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
-    last_attempt = models.CharField(max_length=1, choices=get_choices())
+    last_attempt = models.CharField(max_length=1, choices=DEFAULT_CHOICES)
