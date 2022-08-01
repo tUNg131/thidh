@@ -1,55 +1,69 @@
 import random
 
 from django.core.management.base import BaseCommand
-from questions.models import Question, Section, Paper
+from questions.models import Choice, Question, Section, Paper, QuestionType
 
 
-def get_question(paper, section):
-    x, y = random.sample(range(10), k=2)  # from 0 to 9
-    question_text = f"{x}+{y}=?"
+def create_question(**kwargs):
+    question_template = "{}+{}=?"
+    x, y = random.sample(range(10), k=2)
+    shift = random.randint(0, 3)
+    kwargs.update({"text": question_template.format(x, y)})
 
-    choices = [x, 2 * y, x - y, y]
-    correct_answer = random.randint(1, 4)
-    choices[correct_answer - 1] = x + y
+    q = Question.objects.create(**kwargs)
 
-    json_data = {
-        "qnt": question_text,
-        "chs": choices
-    }
+    choice_index = i_ls = list(range(4))
+    random.shuffle(choice_index)
+    for c_i, i in zip(choice_index, i_ls):
+        text = x + y + i - shift
+        is_correct = (i == shift)
+        index = c_i
 
-    kwargs = {
-        "json_data": json_data,
-        "correct_answer": correct_answer,
-        "paper": paper,
-        "section": section,
-    }
-    return Question(**kwargs)
+        c = Choice.objects.create(
+            text=text,
+            is_correct=is_correct,
+            index=index,
+            question=q
+        )
+
+
+def create_paper():
+    p1 = Paper.objects.create(
+        subject="0", instruction="Choose the correct answer")
+
+    p2 = Paper.objects.create(
+        subject="0", instruction="Choose the correct answer")
+
+    s1 = Section.objects.create(
+        name="Random section 1",
+        instruction="Choose the correct answer",
+        index=1
+    )
+
+    s2 = Section.objects.create(
+        name="Random section 2",
+        instruction="Choose the correct answer",
+        index=2
+    )
+
+    qt = QuestionType.objects.create(name="Random question", subject="0")
+
+    for p in [p1, p2]:
+        i = 1
+        for s in [s1, s2]:
+            for _ in range(10):
+                create_question(
+                    index=i,
+                    paper=p,
+                    section=s,
+                    type=qt
+                )
+                i += 1
 
 
 class Command(BaseCommand):
     help = "Create simple papers"
-    structure = [5, 5, 5, 5]
 
     def handle(self, *args, **options):
-        self.create_paper()
+        create_paper()
 
-    def create_paper(self):
-        paper_kwargs = {
-            "code": "Random Paper",
-            "subject": "Rn",
-            "type": "m"
-        }
-        p = Paper(**paper_kwargs)
-        p.save()
-
-        for i, questions_per_section in enumerate(self.structure):
-            section_kwargs = {
-                "name": f"section-{i}-random-paper",
-                "instruction_text": "Choose the correct answer",
-            }
-            s = Section(**section_kwargs)
-            s.save()
-
-            for _ in range(questions_per_section):
-                q = get_question(p, s)
-                q.save()

@@ -1,13 +1,11 @@
 from django.contrib import admin
 
-from questions.forms import QuestionForm
-from .models import Paper, Section, Question, UserQuestion
+from . import models
 
-
-class QuestionAdmin(admin.ModelAdmin):
-    form = QuestionForm
-
-admin.site.register(Paper)
-admin.site.register(Section)
-admin.site.register(Question, QuestionAdmin)
-admin.site.register(UserQuestion)
+admin.site.register(models.Section)
+admin.site.register(models.Paper)
+admin.site.register(models.PastPaper)
+admin.site.register(models.QuestionType)
+admin.site.register(models.Question)
+admin.site.register(models.Choice)
+admin.site.register(models.UserQuestion)

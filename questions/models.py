@@ -34,9 +34,22 @@ SUBJECTS = [
 ]
 
 
+class Section(models.Model):
+    class Meta:
+        ordering = ["index"]
+
+    name = models.CharField(max_length=100)
+    instructions = models.TextField(verbose_name="Section Instructions")
+    index = models.PositiveSmallIntegerField(verbose_name="Section Index")
+
+    def __str__(self):
+        return self.name
+
+
 class Paper(models.Model):
     subject = models.CharField(max_length=1, choices=SUBJECTS)
-    instruction = models.TextField(verbose_name="Paper Instruction")
+    instructions = models.TextField(verbose_name="Paper Instructions")
+    sections = models.ManyToManyField(Section, through="Question", related_name="papers")
 
 
 class PastPaper(Paper):
@@ -47,22 +60,9 @@ class PastPaper(Paper):
         return f"{self.get_subject_display()} {self.code} {self.date.year}"
 
 
-class Section(models.Model):
-    class Meta:
-        ordering = ["index"]
-
-    name = models.CharField(max_length=100)
-    instruction = models.TextField(verbose_name="Section Instruction")
-    index = models.PositiveSmallIntegerField(verbose_name="Section Index")
-
-    papers = models.ManyToManyField(Paper, through="Question", related_name="sections")
-
-    def __str__(self):
-        return self.name
-
-
 class QuestionType(models.Model):
-    name = models.CharField()
+    """Type of questions"""
+    name = models.CharField(max_length=50)
     subject = models.CharField(max_length=1, choices=SUBJECTS)
 
 
@@ -83,7 +83,7 @@ class Choice(models.Model):
     class Meta:
         ordering = ["index"]
 
-    text = models.CharField(verbose_name="Answer")
+    text = models.CharField(max_length=50, verbose_name="Answer")
     is_correct = models.BooleanField(verbose_name="Is correct choice?")
     index = models.PositiveSmallIntegerField(verbose_name="Choice index")
 

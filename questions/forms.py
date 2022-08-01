@@ -35,6 +35,7 @@ class AnswerField(forms.ChoiceField):
 
 
 class PaperForm(forms.Form):
+    template_name = "paper_form_snippet.html"
     field_name_template = "question-{}"
 
     def __init__(self, paper, **kwargs):
@@ -83,8 +84,8 @@ class PaperForm(forms.Form):
                         "text": question_text,
                         "field": (bf, errors_str),
                     })
-            instructions = s.text
+            instructions = s.instructions
             sections.append({
-                "instruction": instructions,
+                "instructions": instructions,
                 "questions": questions,
             })

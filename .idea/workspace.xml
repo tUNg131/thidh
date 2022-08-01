@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="254ca5bc-5912-4de5-9631-8c303bb55e39" name="Changes" comment="30 July">
-      <change afterPath="$PROJECT_DIR$/questions/forms2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/questions/model1.py" afterDir="false" />
+    <list default="true" id="254ca5bc-5912-4de5-9631-8c303bb55e39" name="Changes" comment="1 Aug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/questions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/forms2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/management/commands/seed.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/management/commands/seed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/model1.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/questions/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +37,6 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/questions/admin.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/apps.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/questions/model1.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/templates/question_detail.html" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/urls.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/views.py" root0="FORCE_HIGHLIGHTING" />
@@ -124,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659217379241</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="1 Aug">
+      <created>1659313874127</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1659313874127</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -162,6 +173,7 @@
     <MESSAGE value="Edit PaperDetailView" />
     <MESSAGE value="27 July" />
     <MESSAGE value="30 July" />
-    <option name="LAST_COMMIT_MESSAGE" value="30 July" />
+    <MESSAGE value="1 Aug" />
+    <option name="LAST_COMMIT_MESSAGE" value="1 Aug" />
   </component>
 </project>
