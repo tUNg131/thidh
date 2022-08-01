@@ -1,129 +1,60 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from .models import Question
-from .models import get_choices
-
-
-class QuestionJSONWidget(forms.MultiWidget):
-    def __init__(self, choices, attrs=None):
-        widgets = [forms.Textarea(attrs=attrs)]
-        for choice in choices:
-            widgets.append(forms.TextInput(attrs=attrs))
-        super().__init__(widgets)
-        self.choices = choices
-
-    def decompress(self, value):
-        if value:
-            question_text = value["qnt"]
-            choices = value["chs"]
-            return [question_text, *choices]
-        return [None] * (len(self.choices) + 1)
-
-
-class HiddenQuestionJSONWidget(QuestionJSONWidget):
-    def __init__(self, choices, attrs=None):
-        super().__init__(choices, attrs)
-        for widget in self.widgets:
-            widget.input_type = 'hidden'
-
-
-class QuestionJSONDataField(forms.MultiValueField):
-    error_messages_template = "Enter a valid answer {}."
-
-    def __init__(self, choices, **kwargs):
-        errors = self.default_error_messages.copy()
-        if "error_messages" in kwargs:
-            errors.update(kwargs["error_messages"])
-        localize = kwargs.get("localize", False)
-        fields = [
-            forms.CharField(
-                error_messages={"invalid": "Enter a valid question text."},
-                localize=localize
-            )
-        ]
-        for choice in choices:
-            if not isinstance(choice, str):
-                choice = str(choice)
-            error_message = QuestionJSONDataField.error_messages_template.format(choice)
-
-            fields.append(
-                forms.CharField(
-                    error_messages={"invalid": error_message},
-                    localize=localize
-                )
-            )
-
-        self.widget = QuestionJSONWidget(choices)
-        self.hidden_widget = HiddenQuestionJSONWidget(choices)
-
-        super().__init__(fields, **kwargs)
-        self.choices = choices
-
-    def compress(self, data_list):
-        if data_list:
-            choices = self.choices
-            for data, choice in zip(data_list, choices):
-                if data in self.empty_values:
-                    error_message = QuestionJSONDataField.error_messages_template.format(
-                        choice)
-                    raise ValidationError(
-                        error_message, code=f"invalid_{choice}"
-                    )
-            question_text, *choices = data_list
-            result = {
-                "qnt": question_text,
-                "chs": choices
-            }
-            return result
-        return None
 
 
 class QuestionForm(forms.ModelForm):
-    json_data = QuestionJSONDataField(['A', 'B', 'C', 'D'])
-
     class Meta:
         model = Question
-        fields = '__all__'
+        fields = "__all__"
+
+
+class AnswerField(forms.ChoiceField):
+    BLANK_OPTION = "---"
+
+    def __init__(self, *, correct_choice, **kwargs):
+        choices = kwargs.pop("choices")
+
+        correct_choice_in_choices = False
+        for c, _ in choices:
+            if c == "n":
+                raise ValueError("Choice key can't be 'n'.")
+            if correct_choice == c:
+                correct_choice_in_choices = True
+        if not correct_choice_in_choices:
+            raise ValueError("Invalid correct choice.")
+
+        choices = [("n", AnswerField.BLANK_OPTION)] + choices
+        super().__init__(choices=choices, **kwargs)
+
+        self.correct_choice = correct_choice
+
+    def is_correct(self, value):
+        return self.correct_choice == value
 
 
 class PaperForm(forms.Form):
-    template_name = "paper_form_snippet.html"
+    field_name_template = "question-{}"
 
-    def __init__(self, paper=None, **kwargs):
-        if paper is None:
-            raise ValueError("Paper is missing")
-
-        self.paper = paper
-
-        sections = []
-        fields = {}
-
-        for s in paper.sections.distinct():
-            questions = []
-            for q in s.questions.all():
-                field_name = f"question-{q.id}"
-                choices = get_choices(q.json_data["chs"])
-                # Need to customise the widget here to some unset value!
-                fields[field_name] = forms.ChoiceField(choices=choices, label="Answer")
-
-                question_text = q.json_data["qnt"]
-                questions.append({
-                    "text": question_text,
-                    "field_name": field_name,
-                })
-
-            instructions = s.instruction_text
-            sections.append({
-                "instructions": instructions,
-                "questions": questions
-            })
-
-        self.sections = sections
-
+    def __init__(self, paper, **kwargs):
         super().__init__(**kwargs)
 
+        fields = {}
+        for s in paper.sections.distinct():
+            for q in s.questions.all():
+                field_name = PaperForm.field_name_template.format(q.id)
+                correct_choice = "n"
+                choices = []
+                for i, c in enumerate(q.choices.all()):
+                    i = str(i)
+                    choices.append((i, c.text))
+                    if c.is_correct:
+                        correct_choice = i
+                fields[field_name] = AnswerField(
+                    choices=choices, correct_choice=correct_choice, label="Answer")
+
+        self.paper = paper
         self.fields.update(fields)
 
     def get_context(self):
@@ -131,10 +62,10 @@ class PaperForm(forms.Form):
         hidden_fields = []
         top_errors = self.non_field_errors().copy()
 
-        for section in self.sections:
+        for s in self.paper.sections.distinct():
             questions = []
-            for question in section["questions"]:
-                name = question["field_name"]
+            for q in s.questions.all():
+                name = PaperForm.field_name_template.format(q.id)
                 bf = self[name]
                 bf_errors = self.error_class(bf.errors, renderer=self.renderer)
                 if bf.is_hidden:
@@ -147,19 +78,13 @@ class PaperForm(forms.Form):
                     hidden_fields.append(bf)
                 else:
                     errors_str = str(bf_errors)
-                    question_text = question["text"]
+                    question_text = q.text
                     questions.append({
                         "text": question_text,
                         "field": (bf, errors_str),
                     })
-            instructions = section["instructions"]
+            instructions = s.text
             sections.append({
-                "instructions": instructions,
+                "instruction": instructions,
                 "questions": questions,
             })
-
-        return {
-            "sections": sections,
-            "hidden_fields": hidden_fields,
-            "errors": top_errors,
-        }
