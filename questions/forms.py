@@ -89,3 +89,22 @@ class PaperForm(forms.Form):
                 "instructions": instructions,
                 "questions": questions,
             })
+        return {
+            "sections": sections,
+            "hidden_fields": hidden_fields,
+            "errors": top_errors,
+        }
+
+    def full_check(self):
+        if not hasattr(self, "cleaned_data"):
+            self.full_clean()
+
+        self.wrong_answers = {}
+        for name, value in self.cleaned_data.items():
+            field = self.fields[name]
+            if not isinstance(field, AnswerField):
+                raise ValueError("Field must be instance of Answer Field")
+            if not field.is_correct(value):
+                self.wrong_answers[name] = "Wrong answer!"
+
+

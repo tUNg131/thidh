@@ -29,20 +29,20 @@ def create_question(**kwargs):
 
 def create_paper():
     p1 = Paper.objects.create(
-        subject="0", instruction="Choose the correct answer")
+        subject="0", instructions="Choose the correct answer")
 
     p2 = Paper.objects.create(
-        subject="0", instruction="Choose the correct answer")
+        subject="0", instructions="Choose the correct answer")
 
     s1 = Section.objects.create(
         name="Random section 1",
-        instruction="Choose the correct answer",
+        instructions="Choose the correct answer",
         index=1
     )
 
     s2 = Section.objects.create(
         name="Random section 2",
-        instruction="Choose the correct answer",
+        instructions="Choose the correct answer",
         index=2
     )
 

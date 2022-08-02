@@ -5,13 +5,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/questions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/forms2.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/questions/management/commands/seed.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/management/commands/seed.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/questions/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/model1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +33,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/questions/admin.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/apps.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/questions/models.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/templates/question_detail.html" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/urls.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/questions/views.py" root0="FORCE_HIGHLIGHTING" />
