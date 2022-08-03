@@ -51,6 +51,10 @@ class Paper(models.Model):
     instructions = models.TextField(verbose_name="Paper Instructions")
     sections = models.ManyToManyField(Section, through="Question", related_name="papers")
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('paper-details', kwargs={'pk': self.pk})
+
 
 class PastPaper(Paper):
     code = models.CharField(max_length=5)

@@ -55,6 +55,7 @@ class PaperForm(forms.Form):
                 fields[field_name] = AnswerField(
                     choices=choices, correct_choice=correct_choice, label="Answer")
 
+        self.wrong_answers = None
         self.paper = paper
         self.fields.update(fields)
 
@@ -80,9 +81,13 @@ class PaperForm(forms.Form):
                 else:
                     errors_str = str(bf_errors)
                     question_text = q.text
+                    wrong_answer_str = ""
+                    if self.wrong_answers:
+                        # Very cumbersome. Need to rewrite this. Have a system like error.
+                        wrong_answer_str = str(self.wrong_answers.get(name, ""))
                     questions.append({
                         "text": question_text,
-                        "field": (bf, errors_str),
+                        "field": (bf, errors_str, wrong_answer_str),
                     })
             instructions = s.instructions
             sections.append({
@@ -103,7 +108,7 @@ class PaperForm(forms.Form):
         for name, value in self.cleaned_data.items():
             field = self.fields[name]
             if not isinstance(field, AnswerField):
-                raise ValueError("Field must be instance of Answer Field")
+                continue
             if not field.is_correct(value):
                 self.wrong_answers[name] = "Wrong answer!"
 
