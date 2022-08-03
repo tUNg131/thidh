@@ -1,0 +1,12 @@
+<h1>Paper List</h1>
+{% if object_list %}
+<ul>
+    {% for paper in object_list %}
+    <li>
+        <a href="{{ paper.get_absolute_url }}">Paper {{ paper.id }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>There are no papers in the database.</p>
+{% endif %}

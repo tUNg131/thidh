@@ -1,5 +1,6 @@
 from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView
+from django.views.generic import ListView
 from django.http import HttpResponse
 
 from .models import Paper
@@ -29,15 +30,10 @@ class PaperDetailView(SingleObjectMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        correct_count = total_count = 0
-        for q in self.object.questions.all():
-            form_answer = form.cleaned_data.get(f'question-{q.id}', None)
-            if form_answer == q.correct_answer:
-                correct_count += 1
-            total_count += 1
-        return HttpResponse(f'You have answered {correct_count}/{total_count} correctly')
+        form.full_check()
+        return self.render_to_response(self.get_context_data(form=form))
 
 
-class QuestionCreateView(CreateView):
-    pass
-    # Using dynamic formset to create the whole paper instead of questions...
+class PaperListView(ListView):
+    model = Paper
+    template_name = "paper_list.html"

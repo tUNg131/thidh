@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from questions.views import PaperDetailView
+from questions.views import PaperDetailView, PaperListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('paper/<int:pk>', PaperDetailView.as_view())
+    path('paper/<int:pk>', PaperDetailView.as_view(), name="paper-details"),
+    path('', PaperListView.as_view()),
 ]
