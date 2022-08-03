@@ -1,13 +1,13 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
-from django.http import HttpResponse
 
 from .models import Paper
 from .forms import PaperForm
 
 
-class PaperDetailView(SingleObjectMixin, FormView):
+class PaperDetailView(LoginRequiredMixin, SingleObjectMixin, FormView):
     # Need to check the prefetch_related. https://stackoverflow.com/questions/19649370/django-can-you-tell-if-a-related-field-has-been-prefetched-without-fetching-it
     model = Paper
     template_name = 'paper_details.html'
@@ -34,6 +34,6 @@ class PaperDetailView(SingleObjectMixin, FormView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class PaperListView(ListView):
+class PaperListView(LoginRequiredMixin, ListView):
     model = Paper
     template_name = "paper_list.html"
