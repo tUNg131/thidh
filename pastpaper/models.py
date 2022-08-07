@@ -1,7 +1,16 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from accounts.models import User
-from .choices import OPTIONS
+
+
+BLANK_OPTIONS = "---"
+OPTIONS = [
+    ("n", BLANK_OPTIONS),
+    ("0", "A"),
+    ("1", "B"),
+    ("2", "C"),
+    ("3", "D"),
+]
 
 
 class PastPaper(models.Model):
