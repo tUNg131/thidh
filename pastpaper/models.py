@@ -1,16 +1,10 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+
+from .choices import get_choice_tuples
 from accounts.models import User
 
-
-BLANK_OPTIONS = "---"
-OPTIONS = [
-    ("n", BLANK_OPTIONS),
-    ("0", "A"),
-    ("1", "B"),
-    ("2", "C"),
-    ("3", "D"),
-]
+DEFAULT_CHOICES = get_choice_tuples()
 
 
 class PastPaper(models.Model):
@@ -23,10 +17,12 @@ class PastPaper(models.Model):
     #         "questions": [{
     #             "text": "",
     #             "options": ["", "", ..],
-    #             "correct_option": "0"
     #         }]
     #     }]
     # }
+    correct_options = ArrayField(
+        models.CharField(max_length=1, choices=DEFAULT_CHOICES)
+    )
     created_time = models.TimeField(auto_now_add=True)
     updated_time = models.TimeField(auto_now=True)
 
@@ -34,7 +30,7 @@ class PastPaper(models.Model):
 class PaperHistory(models.Model):
     # Validation: valid option...
     answer_options = ArrayField(
-        models.CharField(max_length=1, choices=OPTIONS)
+        models.CharField(max_length=1, choices=DEFAULT_CHOICES)
     )
     # Validation: can't > number of questions...
     correct_option_count = models.SmallIntegerField()

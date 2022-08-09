@@ -82,7 +82,6 @@ class Question(models.Model):
     paper = models.ForeignKey(Paper, related_name="questions", on_delete=models.CASCADE)
     section = models.ForeignKey(Section, related_name="questions", on_delete=models.CASCADE)
     type = models.ForeignKey(QuestionType, related_name="questions", on_delete=models.CASCADE)
-    users = models.ManyToManyField(User, through="UserQuestion", related_name="questions")
 
 
 class Choice(models.Model):

@@ -1,7 +1,11 @@
-from django.forms import ModelForm
+from django.forms import Form
 from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 from django.forms.utils import ErrorDict
+from django.utils.safestring import mark_safe
+
+from .choices import get_choice_tuples
+from .models import PastPaper
 
 
 class WrongAnswerDict(ErrorDict):
@@ -15,25 +19,35 @@ class AnswerField(ChoiceField):
         super().__init__(**kwargs)
         self.correct_choice = correct_choice
 
+    def is_correct(self, value):
+        return value == self.correct_choice
 
-class DoPaperForm(ModelForm):
-    def __init__(self, json_data, **kwargs):
+
+class DoPaperForm(Form):
+    template_name = "do_paper_form_snippet.html"
+
+    def __init__(self, paper, **kwargs):
         super().__init__(**kwargs)
 
-        self.json_data = json_data
+        if not isinstance(paper, PastPaper):
+            raise ValueError("Has to be instance of PastPaper")
+        self._paper = paper
+
         self._wrong_answers = None
 
         fields = {}
-        index = 0
-        for section in json_data["sections"]:
-            for question in section["questions"]:
-                option_texts = question["options"]
-                # choices are not correct anymore
-                choices = list(zip(range(len(option_texts)), option_texts))
-                field_name = f"question-{index}"
-                fields[field_name] = AnswerField(choices=choices)
-                index += 1
+        questions = self.get_questions(paper.json_data)
+        for i, (q, correct_option) in enumerate(zip(questions, paper.correct_options)):
+            choices = get_choice_tuples(options=q["options"])
+            field_name = self.get_field_name(i)
+            fields[field_name] = AnswerField(correct_option, choices=choices)
+
         self.fields = fields
+
+    def get_questions(self, json_data):
+        for s in json_data["sections"]:
+            for q in s["questions"]:
+                yield q
 
     @property
     def wrong_answers(self):
@@ -43,7 +57,22 @@ class DoPaperForm(ModelForm):
 
     def get_context(self):
         context = super().get_context()
+        fields = context["fields"]
+        paper_json = self._paper.json_data
 
+        for i, q in enumerate(self.get_questions(paper_json)):
+            bf, error_str = fields[i]
+            name = self.get_field_name(i)
+            wrong_answer_str = self.wrong_answers.get(name, "")
+            wrong_answer_str = mark_safe(wrong_answer_str)
+            q.update({
+                "field_error": error_str,
+                "field": bf,
+                "wrong_answer": wrong_answer_str,
+            })
+        context.update({"paper": paper_json})
+        return context
+                
     def check_answers(self):
         self._wrong_answers = WrongAnswerDict()
         if not hasattr(self, "cleaned_data"):
@@ -51,6 +80,11 @@ class DoPaperForm(ModelForm):
 
         for name, value in self.cleaned_data.items():
             field = self.fields[name]
+            if not field.is_correct(value):
+                self._wrong_answers[name] = "Wrong!"
+
+    def get_field_name(i):
+        return f"question-{i}"
 
 
 

@@ -1,0 +1,12 @@
+{{ errors }}
+{% for section in paper %}
+    <div>{{ section.instructions }}</div>
+    {% for question in section.questions %}
+        <div>{{ question.text }}</div>
+        <div>
+            {{ question.field_errors }}
+            {{ question.field }}
+            {{ question.wrong_answer }}
+        </div>
+    {% endfor %}
+{% endfor %}
