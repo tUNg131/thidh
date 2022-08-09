@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="254ca5bc-5912-4de5-9631-8c303bb55e39" name="Changes" comment="2 Aug">
+    <list default="true" id="254ca5bc-5912-4de5-9631-8c303bb55e39" name="Changes" comment="7 Aug 2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pastpaper/choices.py" beforeDir="false" afterPath="$PROJECT_DIR$/pastpaper/choices.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pastpaper/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/pastpaper/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pastpaper/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pastpaper/models.py" afterDir="false" />
     </list>
@@ -136,7 +137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659427756013</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="7 Aug 2">
+      <created>1659907251551</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1659907251551</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -176,6 +184,7 @@
     <MESSAGE value="30 July" />
     <MESSAGE value="1 Aug" />
     <MESSAGE value="2 Aug" />
-    <option name="LAST_COMMIT_MESSAGE" value="2 Aug" />
+    <MESSAGE value="7 Aug 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="7 Aug 2" />
   </component>
 </project>

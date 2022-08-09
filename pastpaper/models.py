@@ -23,12 +23,10 @@ class PastPaper(models.Model):
     #         "questions": [{
     #             "text": "",
     #             "options": ["", "", ..],
+    #             "correct_option": "0"
     #         }]
     #     }]
     # }
-    correct_options = ArrayField(
-        models.CharField(max_length=1, choices=OPTIONS)
-    )
     created_time = models.TimeField(auto_now_add=True)
     updated_time = models.TimeField(auto_now=True)
 

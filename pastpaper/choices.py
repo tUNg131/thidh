@@ -1,8 +1,5 @@
 BLANK_OPTIONS = "---"
-OPTIONS = [
-    ("n", BLANK_OPTIONS),
-    ("1", "2"),
-    ("2", "2"),
-    ("3", "3"),
-    ("4", "4"),
-]
+DEFAULT_OPTIONS = ["A", "B", "C", "D"]
+
+def get_choice_tuples(options):
+    return [str(i), ]
