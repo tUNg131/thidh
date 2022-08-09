@@ -1,0 +1,47 @@
+from django.contrib.postgres.fields import ArrayField
+from django.db import models
+from accounts.models import User
+
+
+BLANK_OPTIONS = "---"
+OPTIONS = [
+    ("n", BLANK_OPTIONS),
+    ("0", "A"),
+    ("1", "B"),
+    ("2", "C"),
+    ("3", "D"),
+]
+
+
+class PastPaper(models.Model):
+    # Validation: correct format..
+    json_data = models.JSONField(verbose_name="JSON Data")
+    # {
+    #     "instructions": "",
+    #     "sections": [{
+    #         "instructions": "",
+    #         "questions": [{
+    #             "text": "",
+    #             "options": ["", "", ..],
+    #             "correct_option": "0"
+    #         }]
+    #     }]
+    # }
+    created_time = models.TimeField(auto_now_add=True)
+    updated_time = models.TimeField(auto_now=True)
+
+
+class PaperHistory(models.Model):
+    # Validation: valid option...
+    answer_options = ArrayField(
+        models.CharField(max_length=1, choices=OPTIONS)
+    )
+    # Validation: can't > number of questions...
+    correct_option_count = models.SmallIntegerField()
+    blank_option_count = models.SmallIntegerField()
+    is_active = models.BooleanField()
+    created_time = models.TimeField(auto_now_add=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    paper = models.ForeignKey(PastPaper, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
