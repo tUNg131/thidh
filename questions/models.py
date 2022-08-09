@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 from accounts.models import User
 
@@ -49,6 +50,7 @@ class Section(models.Model):
 class Paper(models.Model):
     subject = models.CharField(max_length=1, choices=SUBJECTS)
     instructions = models.TextField(verbose_name="Paper Instructions")
+    
     sections = models.ManyToManyField(Section, through="Question", related_name="papers")
 
     def get_absolute_url(self):
@@ -75,7 +77,7 @@ class Question(models.Model):
         ordering = ["index"]
 
     text = models.TextField(verbose_name="Question")
-    index = models.PositiveSmallIntegerField(verbose_name="Question index")
+    index = models.PositiveSmallIntegerField(verbose_name="Question number")
 
     paper = models.ForeignKey(Paper, related_name="questions", on_delete=models.CASCADE)
     section = models.ForeignKey(Section, related_name="questions", on_delete=models.CASCADE)
@@ -89,14 +91,23 @@ class Choice(models.Model):
 
     text = models.CharField(max_length=50, verbose_name="Answer")
     is_correct = models.BooleanField(verbose_name="Is correct choice?")
-    index = models.PositiveSmallIntegerField(verbose_name="Choice index")
+    index = models.PositiveSmallIntegerField(verbose_name="Choice number")
 
     question = models.ForeignKey(Question, related_name="choices", on_delete=models.CASCADE)
 
 
-class UserQuestion(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
+class PaperHistory(models.Model):
+    start_time = models.TimeField(
+        verbose_name="User starts at", blank=True, null=True)
+    finish_time = models.TimeField(verbose_name="User finishes at", blank=True, null=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="paper_history", on_delete=models.CASCADE)
+    paper = models.ForeignKey(Paper, related_name="history", on_delete=models.PROTECT)
+
+
+class QuestionHistory(models.Model):
+    timestamp = models.TimeField(verbose_name="Submitted at", auto_now=True)
+
+    paper_history = models.ForeignKey(PaperHistory, related_name="questions", on_delete=models.CASCADE)
+    answer_choice = models.ForeignKey(Choice, on_delete=models.PROTECT)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    last_attempt = models.ForeignKey(Choice, on_delete=models.CASCADE)
