@@ -1,4 +1,5 @@
-BLANK_OPTIONS = "---"
+MODEL_BLANK_CHAR = "n"
+BLANK_TEXT = "---"
 DEFAULT_OPTIONS = ["A", "B", "C", "D"]
 
 
@@ -7,4 +8,4 @@ def get_choice_tuples(options=DEFAULT_OPTIONS):
 
 
 def get_choice_tuples_with_blank(**kwargs):
-    return ["n", BLANK_OPTIONS] + get_choice_tuples(**kwargs)
+    return [MODEL_BLANK_CHAR, BLANK_TEXT] + get_choice_tuples(**kwargs)
