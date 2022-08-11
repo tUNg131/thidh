@@ -37,3 +37,5 @@ class PaperDetailView(LoginRequiredMixin, SingleObjectMixin, FormView):
 class PaperListView(LoginRequiredMixin, ListView):
     model = Paper
     template_name = "paper_list.html"
+
+
