@@ -1,3 +1,5 @@
+import itertools
+
 from django.forms import Form
 from django.forms.utils import RenderableMixin
 from django.forms.renderers import get_default_renderer
@@ -6,13 +8,12 @@ from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 from django.utils.safestring import mark_safe
 
-from .models import PaperHistory, PastPaper, record_to_dict,
-    get_questions_from_json
+from .models import PaperHistory, PastPaper, get_questions_from_json
 from .choices import get_choice_tuples, MODEL_BLANK_CHAR
 
 
 class QuestionResult(RenderableMixin):
-    template_name = "questionresult.html"
+    template_name = "forms/question-result.html"
 
     def __init__(self, *args, is_correct=None, renderer=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +22,7 @@ class QuestionResult(RenderableMixin):
         # Need to tell the correct answers as well...
 
     def get_context(self):
-        if is_correct is None:
+        if self.is_correct is None:
             result = None
         else:
             result = self
@@ -29,12 +30,14 @@ class QuestionResult(RenderableMixin):
             "result": result
         }
 
+
 class QuestionBoundField(BoundField):
     @property
     def result(self):
         return self.form.results.get(
             self.name, self.form.question_result_class(renderer=self.form.renderer)
         )
+
 
 class QuestionField(ChoiceField):
     widget = RadioSelect
@@ -49,47 +52,43 @@ class QuestionField(ChoiceField):
     def get_bound_field(self, form, field_name):
         return QuestionBoundField(form, self, field_name)
 
+
 class PaperForm(Form):
     question_field_class = QuestionField
     question_result_class = QuestionResult
     record_model = PaperHistory
     paper_model = PastPaper
     field_name_template = "question-%s"
+    template_name = "forms/paper-form.html"
 
-    def __init__(self, paper, record=None, **kwargs):
-        if not isinstance(paper, self.paper_model):
-            raise ValueError("Has to be instance of PastPaper")
-        self._paper = paper
-
-        if record is None:
-            self.record = self.record_model()
-            record_data = {}
-        else:
-            self.record = record
-            record_data = record_to_dict(record)
-
-        initial = kwargs.pop("initial", None)
-        if initial is not None:
-            record_data.update(initial)
-        super().__init__(initial=record_data, **kwargs)
-
+    def __init__(self, record, **kwargs):
+        self.record = record
         self._results = None
 
+        super().__init__(**kwargs)
+
+        paper = record.paper
         fields = {}
+        initial = {}
         correct_options = paper.correct_options
-        iterquestions = get_questions_from_json(paper.json_data)
-        for i, (q, correct_option) in enumerate(zip(iterquestions, correct_options)):
+        questions_iter = get_questions_from_json(paper.json_data)
+        answer_options = record.answer_options or []
+        big_iter = itertools.zip_longest(questions_iter, correct_options, answer_options)
+        for i, (q, correct_option, answer_option) in enumerate(big_iter):
             option_texts = q["options"]
             choices = get_choice_tuples(option_texts)
             name = self.field_name_template % i
             fields[name] = self.question_field_class(
                 correct_option=correct_option, choices=choices, required=False)
+            if answer_option is None:
+                continue
+            initial[name] = answer_option
 
+        self.initial.update(initial)
         self.fields.update(fields)
 
-    @property
-    def paper(self):
-        return self._paper
+        action = self.data.get("action", "save")
+        self._is_submitting = action == "submit"
 
     @property
     def results(self):
@@ -97,22 +96,28 @@ class PaperForm(Form):
             self.check_answers()
         return self._results
 
+    @property
+    def is_submitting(self):
+        return self._is_submitting
+
     def get_context(self):
         context = super().get_context()
-        iterfields = iter(context.pop("fields"))
+        fields_iter = iter(context.pop("fields"))
 
-        paper_json = self.paper.json_data
+        paper = self.record.paper
         fields = []
         sections = []
-        for s in paper_json["sections"]:
+        for s in paper.json_data["sections"]:
             questions = []
             for q in s["questions"]:
-                while:
-                    bf, error_str = next(iterfields)
+                while True:
+                    bf, error_str = next(fields_iter)
                     if isinstance(bf.field, self.question_field_class):
+                        question_text = q["text"]
+                        question_text = mark_safe(question_text)
                         result_str = str(bf.result)
                         result_str = mark_safe(result_str)
-                        questions.append((bf, error_str, result_str))
+                        questions.append((bf, error_str, question_text, result_str))
                         break
                     else:
                         fields.append((bf, error_str))
@@ -121,7 +126,7 @@ class PaperForm(Form):
                 "questions": questions
             })
         paper = {
-            "instructions": paper_json["instructions"],
+            "instructions": paper.json_data["instructions"],
             "sections": sections
         }
         context.update({
@@ -129,6 +134,25 @@ class PaperForm(Form):
             "fields": fields
         })
         return context
+
+    def _post_clean(self):
+        answer_options = []
+        for name in self.fields:
+            field = self.fields[name]
+            if not isinstance(field, self.question_field_class):
+                continue
+
+            value = self.cleaned_data.get(name)
+            if name in self._errors or value in field.empty_values:
+                answer_options.append(MODEL_BLANK_CHAR)
+            else:
+                answer_options.append(value)
+        self.record.answer_options = answer_options
+
+        if self.is_submitting:
+            self.check_answers()
+
+        # Validate the model here (question_count == answer_count)
 
     def check_answers(self):
         self._results = {}
@@ -142,28 +166,12 @@ class PaperForm(Form):
                 continue
 
             is_correct = field.check_answer(value)
+            # get correct option here
             self._results[name] = self.question_result_class(
                 is_correct=is_correct, renderer=self.renderer
             )
             correct_option_count += 1
         self.record.correct_option_count = correct_option_count
 
-
-    def _post_clean(self):
-        answer_options = []
-        for name in self.fields:
-            field = self.fields[name]
-            if not isinstance(field, self.question_field_class):
-                continue
-
-            value = self.cleaned_data.get(name)
-            if name in self_errors or value in field.empty_values:
-                answer_options.append(MODEL_BLANK_CHAR)
-            else:
-                answer_options.append(value)
-
-        self.record.answer_options = answer_options
-        
-        # Validate the model here (question_count == answer_count)
-
-
+    def save(self, commit=True):
+        pass

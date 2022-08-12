@@ -13,9 +13,6 @@ def get_questions_from_json(json_data):
         for q in s["questions"]:
             yield q
 
-def record_to_dict(record):
-    return
-
 
 class PastPaper(models.Model):
     # Validation: correct format..
@@ -43,6 +40,7 @@ class PaperHistory(models.Model):
         models.CharField(max_length=1, choices=DEFAULT_CHOICES_WITH_BLANK)
     )
     # Validation: can't > number of questions...
+    # Check only one History has the correct option count..
     correct_option_count = models.SmallIntegerField(null=True)
     created_time = models.TimeField(auto_now_add=True)
     updated_time = models.TimeField(auto_now=True)
