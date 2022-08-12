@@ -1,5 +1,5 @@
 # Default ignored files
 /shelf/
-.idea/
-.vscode/
+.idea/workspace.xml
+.vscode/settings.json
 *.pyc
