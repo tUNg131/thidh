@@ -1,15 +1,18 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Do Paper</title>
+  <meta charset="UTF-8">
+  <title>Do Paper</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit" name="action" value="save">Save</button>
-        <button type="submit" name="action" value="submit">Submit</button>
-    </form>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" name="action" value="save">Save</button>
+  <button type="submit" name="action" value="submit">Submit</button>
+</form>
 </body>
 </html>

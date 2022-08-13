@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import BaseUpdateView, SingleObjectTemplateResponseMixin
+from django.views.generic import TemplateView
 
 from .models import PastPaper, PaperHistory
 from .forms import PaperForm
@@ -45,3 +46,7 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
             "user": self.request.user,
         })
         return kwargs
+
+
+class TestView(TemplateView):
+    template_name = "test.html"
