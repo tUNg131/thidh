@@ -1,6 +1,6 @@
 import itertools
 
-from django.forms import Form
+from django.forms import ModelForm
 from django.forms.utils import RenderableMixin
 from django.forms.renderers import get_default_renderer
 from django.forms.boundfield import BoundField
@@ -8,7 +8,7 @@ from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 from django.utils.safestring import mark_safe
 
-from .models import PaperHistory, PastPaper, get_questions_from_json
+from .models import PaperHistory, get_questions_from_json
 from .choices import get_choice_tuples, MODEL_BLANK_CHAR
 
 
@@ -53,28 +53,46 @@ class QuestionField(ChoiceField):
         return QuestionBoundField(form, self, field_name)
 
 
-class PaperForm(Form):
+class PaperForm(ModelForm):
     question_field_class = QuestionField
     question_result_class = QuestionResult
-    record_model = PaperHistory
-    paper_model = PastPaper
     field_name_template = "question-%s"
     template_name = "forms/paper-form.html"
 
-    def __init__(self, record, **kwargs):
-        self.record = record
+    class Meta:
+        model = PaperHistory
+        exclude = (
+            "answer_options",
+            "correct_option_count",
+            "paper",
+            "user",
+        )
+
+    def __init__(self, paper=None, user=None, **kwargs):
         self._results = None
+
+        form_opts = self._meta
+        model_opts = form_opts.model._meta
+
+        paper_class = model_opts.get_field('paper').remote_field.model
+        if not isinstance(paper, paper_class):
+            raise ValueError(f"Paper has to be instance of {paper_class}")
+
+        user_class = model_opts.get_field('user').remote_field.model
+        if not isinstance(user, user_class):
+            raise ValueError(f"User has to be instance of {user_class}")
 
         super().__init__(**kwargs)
 
-        paper = record.paper
         fields = {}
         initial = {}
+
+        paper_json = paper.json_data
+        questions_iter = get_questions_from_json(paper_json)
         correct_options = paper.correct_options
-        questions_iter = get_questions_from_json(paper.json_data)
-        answer_options = record.answer_options or []
-        big_iter = itertools.zip_longest(questions_iter, correct_options, answer_options)
-        for i, (q, correct_option, answer_option) in enumerate(big_iter):
+        answer_options = self.instance.answer_options or []
+        for i, (q, correct_option, answer_option) in \
+                enumerate(itertools.zip_longest(questions_iter, correct_options, answer_options)):
             option_texts = q["options"]
             choices = get_choice_tuples(option_texts)
             name = self.field_name_template % i
@@ -86,6 +104,9 @@ class PaperForm(Form):
 
         self.initial.update(initial)
         self.fields.update(fields)
+
+        self.instance.paper = paper
+        self.instance.user = user
 
         action = self.data.get("action", "save")
         self._is_submitting = action == "submit"
@@ -104,7 +125,7 @@ class PaperForm(Form):
         context = super().get_context()
         fields_iter = iter(context.pop("fields"))
 
-        paper = self.record.paper
+        paper = self.instance.paper
         fields = []
         sections = []
         for s in paper.json_data["sections"]:
@@ -136,6 +157,8 @@ class PaperForm(Form):
         return context
 
     def _post_clean(self):
+        super()._post_clean()
+
         answer_options = []
         for name in self.fields:
             field = self.fields[name]
@@ -147,7 +170,7 @@ class PaperForm(Form):
                 answer_options.append(MODEL_BLANK_CHAR)
             else:
                 answer_options.append(value)
-        self.record.answer_options = answer_options
+        self.instance.answer_options = answer_options
 
         if self.is_submitting:
             self.check_answers()
@@ -170,8 +193,6 @@ class PaperForm(Form):
             self._results[name] = self.question_result_class(
                 is_correct=is_correct, renderer=self.renderer
             )
-            correct_option_count += 1
-        self.record.correct_option_count = correct_option_count
-
-    def save(self, commit=True):
-        pass
+            if is_correct:
+                correct_option_count += 1
+        self.instance.correct_option_count = correct_option_count

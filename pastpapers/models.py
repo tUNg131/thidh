@@ -41,7 +41,7 @@ class PaperHistory(models.Model):
     )
     # Validation: can't > number of questions...
     # Check only one History has the correct option count..
-    correct_option_count = models.SmallIntegerField(null=True)
+    correct_option_count = models.SmallIntegerField(blank=True, null=True)
     created_time = models.TimeField(auto_now_add=True)
     updated_time = models.TimeField(auto_now=True)
 
