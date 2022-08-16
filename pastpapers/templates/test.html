@@ -4,25 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <title>Paper Test</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <div class="container">
       <a class="navbar-brand" href="#">Thidh</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link" href="#">Past Papers</a>
-          <a class="nav-link" href="#">Luyện thi</a>
-        </div>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link">Đề chính thức</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Đề thi thử</a>
+        </li>
+      </ul>
+
+      <div class="nav-item dropdown">
+        <a class="dropdown nav-link" href="#" role="button" data-bs-toggle="dropdown">
+          <i class="bi bi-person-circle h4"></i>
+        </a>
+          
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
       </div>
     </div>
   </nav>
 
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
