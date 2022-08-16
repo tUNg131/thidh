@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <title>Paper Test</title>
 </head>
+
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
     <div class="container">
       <a class="navbar-brand" href="#">Thidh</a>
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link">Đề chính thức</a>
+      <ul class="navbar-nav me-auto" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link btn btn-link shadow-none active" type="button" data-bs-toggle="tab" data-bs-target="#pastpaper" role="tab">
+            Đề chính thức
+          </button>
         </li>
-        <li class="nav-item">
-          <a class="nav-link">Đề thi thử</a>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link btn btn-link shadow-none" type="button" data-bs-toggle="tab" data-bs-target="#mockpaper">
+            Đề thi thử
+          </button>
         </li>
       </ul>
 
@@ -25,8 +31,7 @@
         <a class="dropdown nav-link" href="#" role="button" data-bs-toggle="dropdown">
           <i class="bi bi-person-circle h4"></i>
         </a>
-          
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="#">Action</a></li>
           <li><a class="dropdown-item" href="#">Another action</a></li>
           <li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -35,8 +40,101 @@
     </div>
   </nav>
 
-  
+  <section class="bg-light p-2">
+    <div class="container tab-content">
+      <div class="tab-pane show active" id="pastpaper" role="tabpanel">
+        <ul class="nav nav-pills justify-content-center" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#toan" type="button" role="tab">
+              Toán
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#ly" type="button" role="tab">
+              Lý
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#hoa" type="button" role="tab">
+              Hoá
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sinh" type="button" role="tab">
+              Sinh
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#su" type="button" role="tab">
+              Sử
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#dia" type="button" role="tab">
+              Địa
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#gdcd" type="button" role="tab">
+              GDCD
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#ngoaingu" type="button" role="tab">
+              Ngoại ngữ
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container tab-content">
+      <div class="tab-pane show active" id="toan" role="tabpanel">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic sit aliquid necessitatibus. A, dicta consequatur!
+        </p>
+      </div>
+      <div class="tab-pane" id="ly" role="tabpanel">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Id ipsum dicta expedita architecto, eos voluptatum!
+        </p>
+      </div>
+      <div class="tab-pane" id="hoa" role="tabpanel">
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos at nisi molestias corporis eligendi totam.
+        </p>
+      </div>
+      <div class="tab-pane" id="sinh" role="tabpanel">
+        <p>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum atque assumenda aliquid, harum omnis asperiores.
+        </p>
+      </div>
+      <div class="tab-pane" id="su" role="tabpanel">
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi consequuntur corrupti minima maxime, amet corporis.
+        </p>
+      </div>
+      <div class="tab-pane" id="dia" role="tabpanel">
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente, voluptatem mollitia? Repellat libero eaque non.
+        </p>
+      </div>
+      <div class="tab-pane" id="gdcd" role="tabpanel">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, adipisci in cumque laudantium dicta non!
+        </p>
+      </div>
+      <div class="tab-pane" id="ngoaingu" role="tabpanel">
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem ex fugit molestias ab, aliquid tempore.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
 </html>
