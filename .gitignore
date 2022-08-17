@@ -3,3 +3,4 @@
 .idea/workspace.xml
 .vscode/settings.json
 *.pyc
+.DS_store
