@@ -50,3 +50,7 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
 
 class TestView(TemplateView):
     template_name = "test.html"
+
+
+class TestFormView(TemplateView):
+    template_name = "form.html"
