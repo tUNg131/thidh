@@ -15,59 +15,56 @@
   <nav class="navbar navbar-expand-lg navbar-dark border-bottom">
     <div class="container">
       <a class="navbar-brand text-primary" href="#">Thidh</a>
-      <button class="navbar-toggler text-primary shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#subjectNavBar">
-        <i class="bi bi-three-dots-vertical"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="subjectNavBar">
-        <ul class="nav nav-pills" role="tablist">
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#toan" type="button" role="tab">
-              Toán
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#ly" type="button" role="tab">
-              Lý
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#hoa" type="button" role="tab">
-              Hoá
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#sinh" type="button" role="tab">
-              Sinh
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#su" type="button" role="tab">
-              Sử
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#dia" type="button" role="tab">
-              Địa
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#gdcd" type="button" role="tab">
-              GDCD
-            </button>
-          </li>
-          <li class="nav-item mx-1" role="presentation">
-            <button class="nav-link rounded-pill active" data-bs-toggle="pill" data-bs-target="#ngoaingu" type="button" role="tab">
-              Ngoại ngữ
-            </button>
-          </li>
-        </ul>
-        <div class="ms-auto py-2">
-          Chào, <a class="link-primary" href=""><i>Tùng</i></a> /
-          <a href="" class="link-primary"><i>Logout</i></a>
-        </div>
+      <div class="ms-auto py-2">
+        Chào, <a class="link-primary" href=""><i>Tùng</i></a> /
+        <a href="" class="link-primary"><i>Logout</i></a>
       </div>
     </div>
   </nav>
+  <div class="d-flex justify-content-center border-bottom">
+    <ul class="nav nav-pills py-1" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#toan" type="button" role="tab">
+          <small>Toán</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#ly" type="button" role="tab">
+          <small>Lý</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#hoa" type="button" role="tab">
+          <small>Hóa</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#sinh" type="button" role="tab">
+          <small>Sinh</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#su" type="button" role="tab">
+          <small>Sử</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#dia" type="button" role="tab">
+          <small>Địa</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#gdcd" type="button" role="tab">
+          <small>GDCD</small>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center active" data-bs-toggle="pill" data-bs-target="#ngoaingu" type="button" role="tab">
+          <small>Ngoại ngữ</small>
+        </button>
+      </li>
+    </ul>
+  </div>
   <section>
     <div class="tab-content">
       <!-- Toán -->
@@ -292,37 +289,37 @@
       <div class="tab-pane show active" id="ngoaingu" role="tabpanel">
         <!-- Ngoại ngữ navbar -->
         <ul class="nav nav-pills justify-content-center py-1 border-bottom" id="pills-tab" role="tablist">
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center active" data-bs-toggle="pill" data-bs-target="#anh" role="tab">
               <small>Anh</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#phap" role="tab">
               <small>Pháp</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#duc" role="tab">
               <small>Đức</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#nhat" role="tab">
               <small>Nhật</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#han" role="tab">
               <small>Hàn</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#nga" role="tab">
               <small>Nga</small>
             </button>
           </li>
-          <li class="nav-item mx-1" role="presentation">
+          <li class="nav-item" role="presentation">
             <button class="nav-link py-1 rounded-pill d-inline-flex align-items-center" data-bs-toggle="pill" data-bs-target="#trung" role="tab">
               <small>Trung</small>
             </button>
