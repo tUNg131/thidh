@@ -13,7 +13,7 @@ from .choices import get_choice_tuples, MODEL_BLANK_CHAR
 
 
 class QuestionResult(RenderableMixin):
-    template_name = "forms/question-result.html"
+    template_name = "pastpapers/forms/question-result.html"
 
     def __init__(self, *args, is_correct=None, renderer=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -57,7 +57,7 @@ class PaperForm(ModelForm):
     question_field_class = QuestionField
     question_result_class = QuestionResult
     field_name_template = "question-%s"
-    template_name = "forms/paper-form.html"
+    template_name = "pastpapers/forms/paper-form.html"
 
     class Meta:
         model = PaperHistory

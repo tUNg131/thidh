@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark border-bottom">
+    <div class="container">
+      <a class="navbar-brand text-primary" href="#">Thidh</a>
+      <button class="navbar-toggler text-primary shadow-none" type="button" data-bs-toggle="collapse"
+        data-bs-target="#subjectNavBar">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="subjectNavBar">
+        <ul class="nav nav-pills">
+          <li class="nav-item mx-1">
+            {% block anchor_tag_toan %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_ly %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_hoa %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_sinh %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_su %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_dia %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_gdcd %}{% endblock %}
+          </li>
+          <li class="nav-item mx-1">
+            {% block anchor_tag_ngoaingu %}{% endblock %}
+          </li>
+        </ul>
+        <div class="ms-auto py-2">
+          Chào, <a class="link-primary" href=""><i>Tùng</i></a> /
+          <a href="" class="link-primary"><i>Logout</i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  {% block body %}
+  {% endblock %}
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

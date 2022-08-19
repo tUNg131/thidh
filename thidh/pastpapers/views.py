@@ -10,7 +10,7 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
     paper_model = PastPaper
     model = PaperHistory
     form_class = PaperForm
-    template_name = "do-paper.html"
+    template_name = "pastpapers/do-paper.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object_or_none()
@@ -49,7 +49,7 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
 
 
 class TestView(TemplateView):
-    template_name = "test.html"
+    template_name = "index.html"
 
 
 class TestFormView(TemplateView):

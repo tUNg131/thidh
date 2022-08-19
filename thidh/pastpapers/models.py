@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from .choices import get_choice_tuples, get_choice_tuples_with_blank
-from accounts.models import User
+from thidh.accounts.models import User
 
 DEFAULT_CHOICES = get_choice_tuples()
 DEFAULT_CHOICES_WITH_BLANK = get_choice_tuples_with_blank()

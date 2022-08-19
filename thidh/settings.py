@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig',
-    'pastpapers.apps.PastPapersConfig',
+    'thidh.accounts.apps.AccountsConfig',
+    'thidh.pastpapers.apps.PastPapersConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'thidh.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
