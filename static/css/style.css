@@ -1,0 +1,8 @@
+.mt-ngoai-ngu-1 {
+    margin-top: 20px;
+}
+
+.mt-ngoai-ngu-0 {
+    --ngoai-ngu-navbar-height: 38px;
+    margin-top: calc(var(--ngoai-ngu-navbar-height) + 20px);
+}
