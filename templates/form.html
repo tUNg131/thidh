@@ -2,52 +2,15 @@
 
 {% block title %}Test{% endblock %}
 
-{% block anchor_tag_toan %}
-  <a class="nav-link rounded-pill" href="{% url 'pastpapers:test_index' %}">Toán</a>
-{% endblock %}
-
-{% block anchor_tag_ly %}
-  <a class="nav-link rounded-pill" href="">Lý</a>
-{% endblock %}
-
-{% block anchor_tag_hoa %}
-  <a class="nav-link rounded-pill" href="">Hóa</a>
-{% endblock %}
-
-{% block anchor_tag_sinh %}
-  <a class="nav-link rounded-pill" href="">Sinh</a>
-{% endblock %}
-
-{% block anchor_tag_su %}
-  <a class="nav-link rounded-pill" href="">Sử</a>
-{% endblock %}
-
-{% block anchor_tag_dia %}
-  <a class="nav-link rounded-pill" href="">Địa</a>
-{% endblock %}
-
-{% block anchor_tag_gdcd %}
-  <a class="nav-link rounded-pill" href="">GDCD</a>
-{% endblock %}
-
-{% block anchor_tag_ngoaingu %}
-  <a class="nav-link rounded-pill" href="">Ngoại ngữ</a>
-{% endblock %}
-
 {% block body %}
   <section>
     <div class="container">
-      <div class="card">
-        <h4 class="card-header">Test 1</h4>
-        <div class="card-body">
-          <h5 class="card-title">60 mins</h5>
-          <p class="card-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur similique nesciunt eaque nostrum deleniti
-            animi soluta porro iusto aut ipsam obcaecati labore hic alias, perferendis maxime, officia numquam mollitia
-            cum quibusdam ipsum, suscipit minus nihil provident asperiores. Mollitia voluptas eos odio, enim tempora
-            doloremque natus, modi facilis maiores, totam odit!
-          </p>
+      <div class="card mt-3 mb-5">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="h4 m-0">Đề thi Tiếng Anh THPT Quốc Gia 2022</div>
+          <div><span class="text-muted">Thời gian: </span><strong>60 phút</strong></div>
         </div>
+        {% include 'anh2022.html' %}
         <div class="card-footer">
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-outline-primary me-1">Lưu</button>

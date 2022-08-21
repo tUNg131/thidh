@@ -1,0 +1,194 @@
+{
+	// Place your thidh workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+// 	<!-- Question 9 -->
+//   <div class="pb-1">
+//     <strong>Question 9:</strong>
+//     The mother tries hard to
+//     _______
+//     sure that her children get the best of everything.
+//     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+//       <div class="col">
+//         <div class="form-check">
+//           <input class="form-check-input" type="checkbox" value="" id="qsn-9-a">
+//           <label class="form-check-label" for="qsn-9-a">
+//             go
+//           </label>
+//         </div>
+//       </div>
+//       <div class="col">
+//         <div class="form-check">
+//           <input class="form-check-input" type="checkbox" value="" id="qsn-9-b">
+//           <label class="form-check-label" for="qsn-9-b">
+//             keep
+//           </label>
+//         </div>
+//       </div>
+//       <div class="col">
+//         <div class="form-check">
+//           <input class="form-check-input" type="checkbox" value="" id="qsn-9-c">
+//           <label class="form-check-label" for="qsn-9-c">
+//             get
+//           </label>
+//         </div>
+//       </div>
+//       <div class="col">
+//         <div class="form-check">
+//           <input class="form-check-input" type="checkbox" value="" id="qsn-9-d">
+//           <label class="form-check-label" for="qsn-9-d">
+//             make
+//           </label>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+	"Correct Answer": {
+		"prefix": ["ca"],
+		"body": [
+			"<!-- Question $1 -->",
+			"<div class=\"pb-1\">",
+			"\t<strong>Question $1:</strong>",
+			"\t$2",
+			"\t_______",
+			"\t$3.",
+			"\t<div class=\"row row-cols-1 row-cols-sm-2 row-cols-md-4\">",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-a\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-a\">",
+			"\t\t\t\t\t$4",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-b\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-b\">",
+			"\t\t\t\t\t$5",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-c\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-c\">",
+			"\t\t\t\t\t$6",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-d\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-d\">",
+			"\t\t\t\t\t$7",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t</div>",
+			"</div>",
+		]
+	},
+	"Long": {
+		"prefix": ["lo"],
+		"body": [
+			"<!-- Question $1 -->",
+			"<div class=\"pb-1\">",
+			"\t<strong>Question $1:</strong>",
+			"\t$2.",
+			"\t<div class=\"row row-cols-1\">",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-a\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-a\">",
+			"\t\t\t\t\t$3",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-b\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-b\">",
+			"\t\t\t\t\t$4",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-c\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-c\">",
+			"\t\t\t\t\t$5",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-d\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-d\">",
+			"\t\t\t\t\t$6",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t</div>",
+			"</div>",
+		]
+	},
+	"Short": {
+		"prefix": ["sh"],
+		"body": [
+			"<!-- Question $1 -->",
+			"<div class=\"pb-1\">",
+			"\t<div class=\"row row-cols-1 row-cols-sm-2 row-cols-xl-5\">",
+			"\t\t<div class=\"col-sm-12 col-xl-2\">",
+			"\t\t\t<strong>Question $1:</strong>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-a\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-a\">",
+			"\t\t\t\t\t$2",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-b\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-b\">",
+			"\t\t\t\t\t$3",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-c\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-c\">",
+			"\t\t\t\t\t$4",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t\t<div class=\"col\">",
+			"\t\t\t<div class=\"form-check\">",
+			"\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" id=\"qsn-$1-d\">",
+			"\t\t\t\t<label class=\"form-check-label\" for=\"qsn-$1-d\">",
+			"\t\t\t\t\t$5",
+			"\t\t\t\t</label>",
+			"\t\t\t</div>",
+			"\t\t</div>",
+			"\t</div>",
+			"</div>",
+		]
+	},
+}

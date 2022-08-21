@@ -1,0 +1,28 @@
+<li class="list-group-item p-0 ps-2">
+  <div class="d-flex flex-row align-items-center flex-wrap">
+    <div class="d-flex flex-fill align-items-center">
+      {% if paper.is_submitted is True %}
+      <i class="bi bi-check-lg text-success m-0 me-4 h4" title="Đã làm"></i>
+      {% elif paper.is_submitted is False %}
+      <i class="bi bi-activity text-warning m-0 me-4 h4" title="Đang làm"></i>
+      {% else %}
+      <i class="bi bi-dash-lg text-muted m-0 me-4 h4" title="Chưa làm"></i>
+      {% endif %}
+      {% url '{{ paper.name }}' as paper_url %}
+      <a href="{{ paper_url }}" class="text-decoration-none text-dark my-2">
+        {{ paper.verbose_name }}
+      </a>
+      <span class="ms-auto">
+        {% if paper.correct_question_count %}
+        {{ paper.correct_question_count }}
+        {% else %}
+        <i class="bi bi-dash"></i>
+        {% endif %}
+        /40
+      </span>
+    </div>
+    <div class="d-flex flex-shrink-0 align-items-center ms-auto ps-4 d-none d-md-block d-lg-none d-xl-none d-xxl-block">
+      <a href="{{ paper_url }}" target="_blank">Mở tab mới</a>
+    </div>
+  </div>
+</li>

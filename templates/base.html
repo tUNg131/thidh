@@ -22,33 +22,37 @@
       <div class="collapse navbar-collapse" id="subjectNavBar">
         <ul class="nav nav-pills">
           <li class="nav-item mx-1">
-            {% block anchor_tag_toan %}{% endblock %}
+            <a class="nav-link rounded-pill{% block toan_navlink_extra_cls %}{% endblock %}" href="" {% block toan_navlink_extra %}{% endblock %}>Toán</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_ly %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block ly_navlink_extra %}{% endblock %}>Lý</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_hoa %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block hoa_navlink_extra %}{% endblock %}>Hóa</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_sinh %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block sinh_navlink_extra %}{% endblock %}>Sinh</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_su %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block su_navlink_extra %}{% endblock %}>Sử</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_dia %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block dia_navlink_extra %}{% endblock %}>Địa</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_gdcd %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block gdcd_navlink_extra %}{% endblock %}>GDCD</a>
           </li>
           <li class="nav-item mx-1">
-            {% block anchor_tag_ngoaingu %}{% endblock %}
+            <a class="nav-link rounded-pill" href="" {% block ngoaingu_navlink_extra %}{% endblock %}>Ngoại ngữ</a>
           </li>
         </ul>
         <div class="ms-auto py-2">
-          Chào, <a class="link-primary" href=""><i>Tùng</i></a> /
-          <a href="" class="link-primary"><i>Logout</i></a>
+          {% if user.is_authenticated %}
+            <a class="link-primary" href=""><i>{{ user.username }}</i></a> /
+            <a href="{% url 'accounts:logout' %}" class="link-primary"><i>Đăng xuất</i></a>
+          {% else %}
+            <a href="{% url 'accounts:login' %}" class="link-primary">Đăng nhập</a>
+          {% endif %}
         </div>
       </div>
     </div>
