@@ -1,15 +1,29 @@
 import itertools
 
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.forms.utils import RenderableMixin
 from django.forms.renderers import get_default_renderer
 from django.forms.boundfield import BoundField
-from django.forms.fields import ChoiceField
-from django.forms.widgets import RadioSelect
+from django.forms.fields import ChoiceField, MultipleChoiceField
+from django.forms.widgets import RadioSelect, CheckboxSelectMultiple
 from django.utils.safestring import mark_safe
 
 from .models import PaperHistory, get_questions_from_json
 from .choices import get_choice_tuples, MODEL_BLANK_CHAR
+
+class QuestionWidget(CheckboxSelectMultiple):
+    options_template_name = None
+    template_name = None
+    pass
+
+class TestForm(Form):
+    OPTIONS = [
+        ("a", "A"),
+        ("b", "B"),
+        ("c", "C"),
+        ("d", "D"),
+    ]
+    field1 = MultipleChoiceField(widget=QuestionWidget, choices=OPTIONS)
 
 
 class QuestionResult(RenderableMixin):
