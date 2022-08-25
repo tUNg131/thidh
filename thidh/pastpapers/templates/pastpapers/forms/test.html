@@ -4,11 +4,22 @@
     <strong>Question 1:</strong>
     What?
   </div>
-  {% with field=fields.0.0 errors=fields.0.1 %}
+  {% with field=fields.0 %}
+  {% with field=field.0 error=field.1 %}
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-    {% include_option "pastpapers/checkbox_option.html" field %}
-    Congratulations!
+    {% include_option "pastpapers/checkbox_option.html" field.subwidgets.0 %}
+      Congratulations!
+    {% end_include %}
+    {% include_option "pastpapers/checkbox_option.html" field.subwidgets.1 %}
+      I'm sorry
+    {% end_include %}
+    {% include_option "pastpapers/checkbox_option.html" field.subwidgets.2 %}
+      Good job!
+    {% end_include %}
+    {% include_option "pastpapers/checkbox_option.html" field.subwidgets.3 %}
+      I'm glad you like it.
     {% end_include %}
   </div>
+  {% endwith %}
   {% endwith %}
 </div>

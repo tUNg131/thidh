@@ -4,16 +4,17 @@ from django.template.loader import get_template
 register = template.Library()
 
 class IncludeOptionNode(template.Node):
-    def __init__(self, template_name, field_context_name, nodelist):
-        self.field = template.Variable(field_context_name)
+    def __init__(self, template_name, option_context_name, nodelist):
+        self.option = template.Variable(option_context_name)
         self.template = get_template(template_name)
         self.nodelist = nodelist
 
     def render(self, context):
         try:
-            field = self.field.resolve(context)
+            breakpoint()
+            option = self.option.resolve(context)
             label = self.nodelist.render(context)
-            return self.template.render({"field": field, "label": label})
+            return self.template.render({"widget": option, "label": label})
         except template.VariableDoesNotExist:
             return ''
 

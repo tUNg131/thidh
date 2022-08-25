@@ -11,13 +11,6 @@ from django.utils.safestring import mark_safe
 from .models import PaperHistory, get_questions_from_json
 from .choices import get_choice_tuples, MODEL_BLANK_CHAR
 
-class QuestionWidget(CheckboxSelectMultiple):
-    option_template_name = "pastpapers/checkbox_option.html"
-    template_name = "pastpapers/question.html"
-    def optgroups(self, name, value, attrs=None):
-        groups = super().optgroups(name, value, attrs)
-        return groups
-
 class TestForm(Form):
     template_name = "pastpapers/forms/test.html"
     OPTIONS = [
@@ -26,7 +19,7 @@ class TestForm(Form):
         ("c", "C"),
         ("d", "D"),
     ]
-    field1 = MultipleChoiceField(widget=QuestionWidget, choices=OPTIONS)
+    field1 = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=OPTIONS)
 
 
 class QuestionResult(RenderableMixin):
