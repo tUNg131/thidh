@@ -1,0 +1,14 @@
+{% load option %}
+<div class="pb-1">
+  <div>
+    <strong>Question 1:</strong>
+    What?
+  </div>
+  {% with field=fields.0.0 errors=fields.0.1 %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    {% include_option "pastpapers/checkbox_option.html" field %}
+    Congratulations!
+    {% end_include %}
+  </div>
+  {% endwith %}
+</div>

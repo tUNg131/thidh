@@ -14,9 +14,21 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
       <div class="col">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="qsn-1-a">
+          <input 
+            class="form-check-input{% if question.a.correct == True %} is-valid{% elif question.a.correct == False %} is-invalid{% endif %}"
+            type="checkbox"
+            id="qsn-1-a"
+            name="qsn-1"
+            value="a"
+            {% if question.a.selected == True %}checked{% endif %}
+          >
           <label class="form-check-label" for="qsn-1-a">
             Congratulations!
+          {% if question.a.correct == True %}
+            <i class="bi bi-check-lg"></i>
+          {% elif question.a.correct == False %}
+            <i class="bi bi-x-lg"></i>
+          {% endif %}
           </label>
         </div>
       </div>
@@ -45,6 +57,7 @@
         </div>
       </div>
     </div>
+    <div><small class="text-danger">Can only submit one option</small></div>
   </div>
   <!-- Question 2 -->
   <div class="pb-1">

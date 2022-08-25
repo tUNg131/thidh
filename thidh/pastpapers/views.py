@@ -61,7 +61,6 @@ def test_view(request):
         form = TestForm(request.POST)
         if form.is_valid():
             result = form.cleaned_data.get('field1')
-            breakpoint()
     else:
-        form = TestForm
+        form = TestForm()
     return render(request, 'pastpapers/test-form.html', {'form': form})
