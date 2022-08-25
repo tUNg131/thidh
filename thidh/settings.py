@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'thidh.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "LeXuanTung",
-        "USER": "LeXuanTung",
+        "NAME": "lexuantung",
+        "USER": "lexuantung",
         "PASSWORD": "",
         "HOST": "localhost",
         "PORT": "",
