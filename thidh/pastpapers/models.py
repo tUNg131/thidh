@@ -19,10 +19,13 @@ class PastPaper(models.Model):
     json_data = models.JSONField(verbose_name="JSON Data")
     # {
     #     "instructions": "",
+    #     "extra_html": "",
     #     "sections": [{
     #         "instructions": "",
     #         "questions": [{
     #             "text": "",
+    #             "extra_html": "",
+    # 
     #             "options": ["", "", ..],
     #         }]
     #     }]

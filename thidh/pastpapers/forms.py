@@ -4,7 +4,7 @@ from django.forms import ModelForm, Form
 from django.forms.utils import RenderableMixin
 from django.forms.renderers import get_default_renderer
 from django.forms.boundfield import BoundField
-from django.forms.fields import ChoiceField, MultipleChoiceField
+from django.forms.fields import MultipleChoiceField
 from django.forms.widgets import RadioSelect, CheckboxSelectMultiple
 from django.utils.safestring import mark_safe
 
@@ -49,15 +49,16 @@ class QuestionBoundField(BoundField):
         )
 
 
-class QuestionField(ChoiceField):
-    widget = RadioSelect
+class QuestionField(MultipleChoiceField):
+    widget = CheckboxSelectMultiple
 
     def __init__(self, *, correct_option, **kwargs):
         super().__init__(**kwargs)
         self.correct_option = correct_option
     
     def check_answer(self, value):
-        return value == self.correct_option
+        breakpoint()
+        return len(value) == 1 and self.correct_option in value
 
     def get_bound_field(self, form, field_name):
         return QuestionBoundField(form, self, field_name)
