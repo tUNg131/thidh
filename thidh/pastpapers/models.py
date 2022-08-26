@@ -16,33 +16,16 @@ def get_questions_from_json(json_data):
 
 class PastPaper(models.Model):
     # Validation: correct format..
-    json_data = models.JSONField(verbose_name="JSON Data")
-    # {
-    #     "instructions": "",
-    #     "extra_html": "",
-    #     "sections": [{
-    #         "instructions": "",
-    #         "questions": [{
-    #             "text": "",
-    #             "extra_html": "",
-    # 
-    #             "options": ["", "", ..],
-    #         }]
-    #     }]
-    # }
-    correct_options = ArrayField(
-        models.CharField(max_length=1, choices=DEFAULT_CHOICES)
-    )
+    template_name = models.CharField(max_length=30)
+    questions = models.JSONField()
+    correct_options = models.JSONField()
     created_time = models.TimeField(auto_now_add=True)
     updated_time = models.TimeField(auto_now=True)
 
 
 class PaperHistory(models.Model):
-    # Validation: valid option...
-    answer_options = ArrayField(
-        models.CharField(max_length=1, choices=DEFAULT_CHOICES_WITH_BLANK)
-    )
-    # Validation: can't > number of questions...
+    # TODO: validation
+    answer_options = models.JSONField()
     # Check only one History has the correct option count..
     correct_option_count = models.SmallIntegerField(blank=True, null=True)
     created_time = models.TimeField(auto_now_add=True)

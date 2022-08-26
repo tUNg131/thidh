@@ -1,5 +1,3 @@
-import itertools
-
 from django.forms import ModelForm, Form
 from django.forms.utils import RenderableMixin
 from django.forms.renderers import get_default_renderer
@@ -22,31 +20,10 @@ class TestForm(Form):
     field1 = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=OPTIONS)
 
 
-class QuestionResult(RenderableMixin):
-    template_name = "pastpapers/forms/question-result.html"
-
-    def __init__(self, *args, is_correct=None, renderer=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.is_correct = is_correct
-        self.renderer = renderer or get_default_renderer()
-        # Need to tell the correct answers as well...
-
-    def get_context(self):
-        if self.is_correct is None:
-            result = None
-        else:
-            result = self
-        return {
-            "result": result
-        }
-
-
 class QuestionBoundField(BoundField):
     @property
     def result(self):
-        return self.form.results.get(
-            self.name, self.form.question_result_class(renderer=self.form.renderer)
-        )
+        return self.form.results.get(self.name, None)
 
 
 class QuestionField(MultipleChoiceField):
@@ -66,9 +43,7 @@ class QuestionField(MultipleChoiceField):
 
 class PaperForm(ModelForm):
     question_field_class = QuestionField
-    question_result_class = QuestionResult
     field_name_template = "question-%s"
-    template_name = "pastpapers/forms/paper-form.html"
 
     class Meta:
         model = PaperHistory
@@ -98,23 +73,18 @@ class PaperForm(ModelForm):
         fields = {}
         initial = {}
 
-        paper_json = paper.json_data
-        questions_iter = get_questions_from_json(paper_json)
-        correct_options = paper.correct_options
-        answer_options = self.instance.answer_options or []
-        for i, (q, correct_option, answer_option) in \
-                enumerate(itertools.zip_longest(questions_iter, correct_options, answer_options)):
-            option_texts = q["options"]
+        self.template_name = paper.template_name
+
+        for i, (option_texts, correct_option) in enumerate(zip(paper.questions, paper.correct_options)):
             choices = get_choice_tuples(option_texts)
             name = self.field_name_template % i
             fields[name] = self.question_field_class(
                 correct_option=correct_option, choices=choices, required=False)
-            if answer_option is None:
-                continue
-            initial[name] = answer_option
+            if self.instance.answer_options:
+                initial[name] = self.instance.answer_options[i]
 
         self.initial.update(initial)
-        self.fields.update(fields)
+        self.fields = fields # Remove all other fields
 
         self.instance.paper = paper
         self.instance.user = user
@@ -134,76 +104,58 @@ class PaperForm(ModelForm):
 
     def get_context(self):
         context = super().get_context()
-        fields_iter = iter(context.pop("fields"))
-
-        paper = self.instance.paper
-        fields = []
-        sections = []
-        for s in paper.json_data["sections"]:
-            questions = []
-            for q in s["questions"]:
-                while True:
-                    bf, error_str = next(fields_iter)
-                    if isinstance(bf.field, self.question_field_class):
-                        question_text = q["text"]
-                        question_text = mark_safe(question_text)
-                        result_str = str(bf.result)
-                        result_str = mark_safe(result_str)
-                        questions.append((bf, error_str, question_text, result_str))
-                        break
-                    else:
-                        fields.append((bf, error_str))
-            sections.append({
-                "instructions": s["instructions"],
-                "questions": questions
-            })
-        paper = {
-            "instructions": paper.json_data["instructions"],
-            "sections": sections
-        }
+        fields = context.pop("fields")
+        questions = []
+        question_errors = []
+        for bf, error_str in fields:
+            questions.append(bf)
+            question_errors.append(error_str)
         context.update({
-            "paper": paper,
-            "fields": fields
+            "questions": questions,
+            "question_errors": question_errors
         })
         return context
 
     def _post_clean(self):
-        super()._post_clean()
+        # super()._post_clean()
 
-        answer_options = []
-        for name in self.fields:
-            field = self.fields[name]
-            if not isinstance(field, self.question_field_class):
-                continue
+        # answer_options = []
+        # for name in self.fields:
+        #     field = self.fields[name]
+        #     if not isinstance(field, self.question_field_class):
+        #         continue
 
-            value = self.cleaned_data.get(name)
-            if name in self._errors or value in field.empty_values:
-                answer_options.append(MODEL_BLANK_CHAR)
-            else:
-                answer_options.append(value)
-        self.instance.answer_options = answer_options
+        #     value = self.cleaned_data.get(name)
+        #     if name in self._errors or value in field.empty_values:
+        #         answer_options.append(MODEL_BLANK_CHAR)
+        #     else:
+        #         answer_options.append(value)
+        # self.instance.answer_options = answer_options
 
-        if self.is_submitting:
-            self.check_answers()
+        # if self.is_submitting:
+        #     self.check_answers()
 
         # Validate the model here (question_count == answer_count)
+        pass
 
     def check_answers(self):
-        self._results = {}
-        if not hasattr(self, "cleaned_data"):
-            return
+        # self._results = {}
+        # if not hasattr(self, "cleaned_data"):
+        #     return
 
-        correct_option_count = 0
-        for name, value in self.cleaned_data.items():
-            field = self.fields[name]
-            if not isinstance(field, self.question_field_class):
-                continue
+        # correct_option_count = 0
+        # for name, value in self.cleaned_data.items():
+        #     field = self.fields[name]
+        #     if not isinstance(field, self.question_field_class):
+        #         continue
 
-            is_correct = field.check_answer(value)
-            # get correct option here
-            self._results[name] = self.question_result_class(
-                is_correct=is_correct, renderer=self.renderer
-            )
-            if is_correct:
-                correct_option_count += 1
-        self.instance.correct_option_count = correct_option_count
+        #     is_correct = field.check_answer(value)
+        #     # get correct option here
+        #     self._results[name] = self.question_result_class(
+        #         is_correct=is_correct, renderer=self.renderer
+        #     )
+        #     if is_correct:
+        #         correct_option_count += 1
+        # self.instance.correct_option_count = correct_option_count
+        pass
+
