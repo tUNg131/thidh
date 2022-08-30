@@ -1,9 +1,6 @@
 {% with field=field.0 errors=field.1 %}
 <div class="pb-1">
-  <div>
-    {% block question_text %}{% endblock %}
-  </div>
-  {% block options_wrap %}{% endblock %}
+  {% block contents %}{% endblock %}
   {% if errors %}
   {% for error in errors %}
   <div><small class="text-danger">{{ error }}</small></div>

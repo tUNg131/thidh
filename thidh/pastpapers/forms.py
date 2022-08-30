@@ -1,9 +1,7 @@
 from django.forms import ModelForm, Form
-from django.forms.utils import RenderableMixin
-from django.forms.renderers import get_default_renderer
 from django.forms.boundfield import BoundField
-from django.forms.fields import MultipleChoiceField
-from django.forms.widgets import RadioSelect, CheckboxSelectMultiple
+from django.forms.fields import MultiValueField, MultipleChoiceField
+from django.forms.widgets import MultiWidget, CheckboxSelectMultiple
 from django.utils.safestring import mark_safe
 
 from .models import PaperHistory, get_questions_from_json
@@ -19,18 +17,15 @@ class TestForm(Form):
     ]
     field1 = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=OPTIONS)
 
-
 class QuestionBoundField(BoundField):
     @property
     def result(self):
         return self.form.results.get(self.name, None)
 
 
-class QuestionField(MultipleChoiceField):
-    widget = CheckboxSelectMultiple
-
-    def __init__(self, *, correct_option, **kwargs):
-        super().__init__(**kwargs)
+class QuestionField(MultiValueField):
+    def __init__(self, *args, correct_option, **kwargs):
+        super().__init__(*args, **kwargs)
         self.correct_option = correct_option
     
     def check_answer(self, value):
@@ -47,6 +42,7 @@ class PaperForm(ModelForm):
 
     class Meta:
         model = PaperHistory
+        # Exclude all
         exclude = (
             "answer_options",
             "correct_option_count",

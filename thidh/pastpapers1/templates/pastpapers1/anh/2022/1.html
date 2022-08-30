@@ -1,0 +1,17 @@
+{% extends "../question_base.html" %}
+
+{% block contents %}
+  <div>
+    <strong>Question 1:</strong>
+    Jennifer is giving Liz a house-warming present.<br>
+    - Liz: "Thanks for the nice gift you bought for us."<br>
+    <!-- 7 underscores -->
+    - Jennifer: "_______"
+  </div>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    {% include "../checkbox_option.html" with widget=field.subwidgets.0 %}
+    {% include "../checkbox_option.html" with widget=field.subwidgets.1 %}
+    {% include "../checkbox_option.html" with widget=field.subwidgets.2 %}
+    {% include "../checkbox_option.html" with widget=field.subwidgets.3 %}
+  </div>
+{% endblock %}

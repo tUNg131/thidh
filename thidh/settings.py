@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'thidh.accounts.apps.AccountsConfig',
-    'thidh.pastpapers.apps.PastPapersConfig',
+    # 'thidh.pastpapers.apps.PastPapersConfig',
+    'thidh.pastpapers1.apps.Pastpapers1Config',
 ]
 
 MIDDLEWARE = [
@@ -75,14 +76,21 @@ WSGI_APPLICATION = 'thidh.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "lexuantung",
+#         "USER": "lexuantung",
+#         "PASSWORD": "",
+#         "HOST": "localhost",
+#         "PORT": "",
+#     }
+# }
+
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "lexuantung",
-        "USER": "lexuantung",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'thidh',
     }
 }
 
