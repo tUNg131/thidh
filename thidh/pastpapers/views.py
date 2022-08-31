@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import BaseUpdateView, SingleObjectTemplateResponseMixin
-from django.views.generic import TemplateView
-from django.shortcuts import render
+# from django.views.generic import TemplateView
+# from django.shortcuts import render
 
 from .models import PastPaper, PaperHistory
-from .forms import PaperForm, TestForm
+from .forms import PaperForm
 
 
 class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpdateView):
@@ -48,19 +48,23 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
         })
         return kwargs
 
+    def form_invalid(self, form):
+        breakpoint()
+        return super().form_invalid(form)
 
-class TestView(TemplateView):
-    template_name = "index.html"
+
+# class TestView(TemplateView):
+#     template_name = "index.html"
 
 
-class TestFormView(TemplateView):
-    template_name = "form.html"
+# class TestFormView(TemplateView):
+#     template_name = "form.html"
 
-def test_view(request):
-    if request.method == 'POST':
-        form = TestForm(request.POST)
-        if form.is_valid():
-            result = form.cleaned_data.get('field1')
-    else:
-        form = TestForm()
-    return render(request, 'pastpapers/test-form.html', {'form': form})
+# def test_view(request):
+#     if request.method == 'POST':
+#         form = TestForm(request.POST)
+#         if form.is_valid():
+#             result = form.cleaned_data.get('field1')
+#     else:
+#         form = TestForm()
+#     return render(request, 'pastpapers/test-form.html', {'form': form})

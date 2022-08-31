@@ -1,18 +1,29 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Do Paper</title>
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-</head>
-<body>
-<form method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit" name="action" value="save">Save</button>
-  <button type="submit" name="action" value="submit">Submit</button>
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Test{% endblock %}
+
+{% block body %}
+<section>
+  <form method="post">
+    {% csrf_token %}
+    <div class="container">
+      <div class="card mt-3 mb-5">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="m-0 h4">
+            <span class="text-muted">Bài thi:</span>
+            <span>Tiếng Anh THPT Quốc Gia 2022</span>
+          </div>
+          <div><span class="text-muted">Thời gian: </span><strong>60 phút</strong></div>
+        </div>
+        {{ form }}
+        <div class="card-footer">
+          <div class="d-flex justify-content-end">
+            <button type="submit" name="action" value="save" class="btn btn-outline-primary me-1">Lưu</button>
+            <button type="submit" name="action" value="submit" class="btn btn-primary">Nộp bài</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+{% endblock %}

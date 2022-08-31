@@ -1,0 +1,7 @@
+{% if errors %}
+  <ul class="p-0 m-0" style="list-style-type: none;">
+    {% for error in errors %}
+    <li><div><small class="text-danger">{{ error }}</small></div></li>
+    {% endfor %}
+  </ul>
+{% endif %}

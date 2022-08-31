@@ -1,0 +1,6 @@
+{% with field=field.0 errors=field.1 %}
+<div class="pb-1">
+  {% block contents %}{% endblock %}
+  {{ errors }}
+</div>
+{% endwith %}

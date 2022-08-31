@@ -1,0 +1,16 @@
+{% extends "pastpapers/forms/questions/base.html" %}
+
+{% block contents %}
+  <div>
+    <strong>Question 2:</strong> Samuel is talking to Lan about volunteer work.
+    - Samuel: "I think we should do some local volunteer work this summer"
+    <!-- 7 underscores -->
+    - Lan: "_______. Some people in our neighbourhood really need help."
+  </div>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.0.data %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.1.data %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.2.data %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.3.data %}
+  </div>
+{% endblock %}

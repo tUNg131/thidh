@@ -4,7 +4,7 @@ from thidh.accounts.models import User
 
 class PastPaper(models.Model):
     # Validation: correct format..
-    template_name = models.CharField(max_length=30)
+    template_name = models.CharField(max_length=100)
     questions = models.JSONField()
     correct_options = models.JSONField()
     created_time = models.TimeField(auto_now_add=True)

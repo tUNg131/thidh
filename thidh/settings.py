@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'thidh.accounts.apps.AccountsConfig',
-    # 'thidh.pastpapers.apps.PastPapersConfig',
-    'thidh.pastpapers1.apps.Pastpapers1Config',
+    'thidh.pastpapers.apps.PastPapersConfig',
+    # 'thidh.pastpapers1.apps.Pastpapers1Config',
 ]
 
 MIDDLEWARE = [
@@ -90,10 +90,9 @@ WSGI_APPLICATION = 'thidh.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'thidh',
+        'NAME': BASE_DIR / 'thidh.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
