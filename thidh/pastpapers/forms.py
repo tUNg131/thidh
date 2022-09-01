@@ -60,7 +60,7 @@ class PaperForm(ModelForm):
         for i, (option_texts, correct_option) in enumerate(zip(paper.questions, paper.correct_options)):
             choices = get_choice_tuples(option_texts)
             name = self.field_name_template % i
-            fields[name] = self.question_field_class(correct_option=correct_option, choices=choices)
+            fields[name] = self.question_field_class(correct_option=correct_option, choices=choices, required=False)
             if self.instance.answer_options:
                 initial[name] = self.instance.answer_options[i]
 
@@ -73,7 +73,21 @@ class PaperForm(ModelForm):
         action = self.data.get("action", "save")
         self._is_submitting = action == "submit"
 
-    def get_context(self, *args, **kwargs):
-        context = super().get_context(*args, **kwargs)
-        breakpoint()
-        return context
+    @property
+    def is_submitting(self):
+        return self._is_submitting
+
+    def _post_clean(self):
+        super()._post_clean()
+        answer_options = []
+        for name in self.fields:
+            field = self.fields[name]
+            value = self.cleaned_data.get(name)
+            if name in self._errors or value in field.empty_values:
+                answer_options.append(None)
+            else:
+                answer_options.append(value)
+        self.instance.answer_options = answer_options 
+
+
+

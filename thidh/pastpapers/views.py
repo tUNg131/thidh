@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import BaseUpdateView, SingleObjectTemplateResponseMixin
+from django.core.exceptions import ImproperlyConfigured
 # from django.views.generic import TemplateView
 # from django.shortcuts import render
 
@@ -48,10 +49,12 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
         })
         return kwargs
 
-    def form_invalid(self, form):
-        breakpoint()
-        return super().form_invalid(form)
-
+    def form_valid(self, form):
+        self.object = form.save()
+        if form.is_submitting:
+            raise ImproperlyConfigured("Empty handler for form submitting.")
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 # class TestView(TemplateView):
 #     template_name = "index.html"

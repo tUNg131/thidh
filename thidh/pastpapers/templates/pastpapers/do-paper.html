@@ -4,14 +4,31 @@
 
 {% block body %}
 <section>
+  {% if save_successful %}
+  <div class="container">
+    <div class="alert alert-success alert-dismissible show" role="alert">
+      Saved!
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+  {% endif %}
   <form method="post">
     {% csrf_token %}
     <div class="container">
       <div class="card mt-3 mb-5">
         <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="m-0 h4">
-            <span class="text-muted">Bài thi:</span>
-            <span>Tiếng Anh THPT Quốc Gia 2022</span>
+          <div class="m-0">
+            <div class="h4 d-inline">
+              <span class="text-muted">Bài thi:</span>
+              <span>Tiếng Anh THPT Quốc Gia 2022</span>
+            </div>
+            <span class="text-muted">
+              {% if object.updated_time %}
+                Đã lưu: {{ object.updated_time }}
+              {% else %}
+                Chưa lưu
+              {% endif %}
+            </span>
           </div>
           <div><span class="text-muted">Thời gian: </span><strong>60 phút</strong></div>
         </div>
