@@ -141,19 +141,5 @@ class PaperForm(ModelForm):
                     result.append(is_correct)
                     continue
                 result.append(None)
-            # get correct option here
             self._results[name] = result
-
-        for name, _ in self.errors.items():
-            bf = self[name]
-            field = self.fields[name]
-            value = bf.data
-            result = []
-            for option, _  in field.choices:
-                if option in value:
-                    result.append(False)
-                    continue
-                result.append(None)
-            self._results[name] = result
-
         self.instance.correct_option_count = correct_option_count
