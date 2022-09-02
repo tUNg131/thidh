@@ -52,7 +52,8 @@ class DoPaperView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, BaseUpd
     def form_valid(self, form):
         self.object = form.save()
         if form.is_submitting:
-            raise ImproperlyConfigured("Empty handler for form submitting.")
+            return self.render_to_response(self.get_context_data(form=form))
+            # raise ImproperlyConfigured("Empty handler for form submitting.")
         else:
             return self.render_to_response(self.get_context_data(form=form))
 

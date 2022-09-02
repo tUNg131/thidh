@@ -8,9 +8,11 @@
     - Lan: "_______. Some people in our neighbourhood really need help."
   </div>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.0.data %}
-    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.1.data %}
-    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.2.data %}
-    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=field.subwidgets.3.data %}
+    {% with subwidgets=field.subwidgets result=field.result %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=subwidgets.0.data result=result.0 %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=subwidgets.1.data result=result.1 %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=subwidgets.2.data result=result.2 %}
+    {% include "pastpapers/forms/questions/options/checkbox.html" with widget=subwidgets.3.data result=result.3 %}
+    {% endwith %}
   </div>
 {% endblock %}

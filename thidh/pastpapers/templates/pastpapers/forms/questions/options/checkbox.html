@@ -1,7 +1,7 @@
 <div class="col">
   <div class="form-check">
     <input 
-      class="form-check-input"
+      class="form-check-input{% if result == True %} is-valid{% elif result == False %} is-invalid{% endif %}"
       type="checkbox"
       id="{{ widget.attrs.id }}"
       name="{{ widget.name }}"
@@ -10,11 +10,11 @@
     >
     <label class="form-check-label" for="{{ widget.attrs.id }}">
       {{ widget.label }}
-      <!-- {% if question.a.correct == True %}
+      {% if result == True %}
       <i class="bi bi-check-lg"></i>
-      {% elif question.a.correct == False %}
+      {% elif result == False %}
       <i class="bi bi-x-lg"></i>
-      {% endif %} -->
+      {% endif %}
     </label>
   </div>
 </div>
